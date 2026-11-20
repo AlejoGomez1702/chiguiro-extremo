@@ -1,0 +1,233 @@
+@if (race(); as r) {
+  <header class="head">
+    <div class="container head-grid">
+      <div class="title">
+        <div class="tags">
+          <span class="tag" [class.tag-ink-line]="!r.isNext">{{ r.statusLabel }}</span>
+          <span class="tag tag-line">Parada {{ r.num }} de 03</span>
+        </div>
+        <h1 class="display display-xl">{{ r.title }}</h1>
+        <p class="place">{{ r.place }}</p>
+      </div>
+      <div class="when">
+        <div class="date">
+          <b class="display">{{ r.dshort }}</b>
+          <span class="mono">{{ r.dsub }}</span>
+        </div>
+        @if (days() !== null) {
+          <div class="count">
+            <b class="display">{{ days() }}</b>
+            <span class="mono">días</span>
+          </div>
+        }
+      </div>
+    </div>
+    <nav class="container subnav" aria-label="Secciones de la carrera">
+      <a href="#info">Info</a>
+      <a href="#trazado">Trazado</a>
+      <a href="#accesos">Cómo llegar</a>
+      <a href="#cobertura">Cobertura</a>
+      @if (products().length) {
+        <a href="#tienda-sede">Tienda</a>
+      }
+      <span class="insc">{{ r.insc }}</span>
+    </nav>
+  </header>
+
+  <!-- info -->
+  <section id="info" class="section">
+    <div class="container info">
+      <div>
+        <span class="eyebrow">Ficha técnica</span>
+        <dl class="facts">
+          @for (f of r.facts; track f.k) {
+            <div>
+              <dt class="mono">{{ f.k }}</dt>
+              <dd class="display">{{ f.v }}</dd>
+            </div>
+          }
+        </dl>
+        <p class="note">{{ r.factsNote }}</p>
+        <div class="kits">
+          <b>Entrega de kits</b>
+          <p>{{ r.kits }}</p>
+        </div>
+      </div>
+      <div>
+        <div class="phase" role="tablist" aria-label="Momento de la carrera">
+          @for (s of states; track s.id) {
+            <button type="button" role="tab" [attr.aria-selected]="phase() === s.id" [class.on]="phase() === s.id" (click)="phase.set(s.id)">
+              {{ s.label }}
+            </button>
+          }
+        </div>
+        @switch (phase()) {
+          @case ('antes') {
+            @if (r.hasMap) {
+              @for (d of data.schedule; track d.day) {
+                <h3 class="day mono">{{ d.day }}</h3>
+                <ul class="schedule">
+                  @for (sl of d.slots; track sl.t + sl.title) {
+                    <li>
+                      <span class="mono">{{ sl.t }}</span>
+                      <span>
+                        <b>{{ sl.title }}</b>
+                        <small>{{ sl.place }}</small>
+                      </span>
+                      <button type="button" class="pin-link mono" (click)="goPin(sl.pin)">Pin {{ sl.pin }}</button>
+                    </li>
+                  }
+                </ul>
+              }
+              <p class="note">Horarios ilustrativos.</p>
+            } @else {
+              <p class="lead">Horarios por anunciar. Se publican cuando el organizador confirme la sede.</p>
+            }
+          }
+          @case ('durante') {
+            <div class="live">
+              <span class="tag">En vivo</span>
+              <p class="lead">El día de la carrera aquí verás la transmisión, los tiempos parciales y el orden de salida.</p>
+              <p class="note">Disponible desde las 15:00 del día de la final.</p>
+            </div>
+          }
+          @case ('despues') {
+            <div class="live">
+              <p class="lead">Resultados oficiales, podio por categoría y galería completa al terminar la premiación.</p>
+              <a class="link-arrow" routerLink="/carreras">Ver la clasificación general →</a>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- trazado 3D -->
+  <section id="trazado" class="track" aria-labelledby="tr-t">
+    <div class="container track-head">
+      <div>
+        <span class="eyebrow">Trazado · {{ r.mapHint }}</span>
+        <h2 id="tr-t" class="display display-m">Recorre la pista en 3D</h2>
+      </div>
+      <p class="note">Arrastra para girar · rueda o pellizca para acercar · toca un punto para ir a él</p>
+    </div>
+    @if (r.hasMap) {
+      <div class="map">
+        <app-descent-canvas mode="map" [focusPin]="focus()" (pins)="onPins($event)" />
+        <div class="pins" aria-hidden="true">
+          @for (p of data.pins; track p.id) {
+            <button type="button" #pinEl [attr.data-pin]="p.id" [class]="'pin ' + p.kind" [class.sel]="selected()?.id === p.id" (click)="pick(p)" tabindex="-1">
+              {{ p.id }}
+            </button>
+          }
+        </div>
+        <aside class="legend glass">
+          @for (g of groups(); track g[0]) {
+            <h3 class="mono">{{ g[0] }}</h3>
+            <ul>
+              @for (p of g[1]; track p.id) {
+                <li>
+                  <button type="button" [class.sel]="selected()?.id === p.id" (click)="pick(p)">
+                    <i [class]="p.kind">{{ p.id }}</i>
+                    {{ p.label }}
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+          @if (selected(); as s) {
+            <div class="detail" role="status">
+              <b>{{ s.label }}</b>
+              <p>{{ s.desc }}</p>
+            </div>
+          }
+        </aside>
+      </div>
+      <div class="container"><p class="note">Trazado ilustrativo generado en 3D. El oficial se publicará antes de la carrera.</p></div>
+    } @else {
+      <div class="container">
+        <div class="tba">
+          <span class="display">Por anunciar</span>
+          <p>{{ r.mapNote }}</p>
+        </div>
+      </div>
+    }
+  </section>
+
+  <!-- accesos -->
+  <section id="accesos" class="section">
+    <div class="container">
+      <span class="eyebrow">Cómo llegar</span>
+      <h2 class="display display-m">Accesos y zonas de público</h2>
+      @if (r.hasMap) {
+        <ul class="access">
+          @for (a of data.access; track a.pin) {
+            <li>
+              <i class="display">{{ a.pin }}</i>
+              <b>{{ a.title }}</b>
+              <p>{{ a.text }}</p>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="lead">Se publican junto con la sede.</p>
+      }
+    </div>
+  </section>
+
+  @if (riders().length) {
+    <section class="section section-dark-2">
+      <div class="container">
+        <span class="eyebrow">Corredores confirmados</span>
+        <h2 class="display display-m">Pilotos invitados</h2>
+        <div class="grid grid-4 riders">
+          @for (rd of riders(); track rd.id) {
+            <app-rider-card [rider]="rd" />
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- cobertura -->
+  <section id="cobertura" class="section section-light">
+    <div class="container">
+      <span class="eyebrow">{{ r.covHint }}</span>
+      <h2 class="display display-m">Cobertura</h2>
+      @if (posts().length) {
+        <div class="grid grid-3 posts">
+          @for (p of posts(); track p.id) {
+            <app-post-card [post]="p" />
+          }
+        </div>
+      } @else {
+        <p class="lead">Aún no hay publicaciones de esta sede.</p>
+      }
+    </div>
+  </section>
+
+  @if (products().length) {
+    <section id="tienda-sede" class="section section-paper">
+      <div class="container">
+        <span class="eyebrow">Tienda de la sede</span>
+        <h2 class="display display-m">Colección {{ r.short }}</h2>
+        <div class="grid grid-4 prods">
+          @for (p of products(); track p.id) {
+            <a [routerLink]="['/tienda', p.id]">
+              <app-product-art [product]="p" />
+              <b>{{ p.name }}</b>
+              <span class="mono">{{ p.price }} USD</span>
+            </a>
+          }
+        </div>
+      </div>
+    </section>
+  }
+} @else {
+  <section class="section missing">
+    <div class="container">
+      <h1 class="display display-l">Carrera no encontrada</h1>
+      <a routerLink="/carreras" class="btn">Ver calendario</a>
+    </div>
+  </section>
+}

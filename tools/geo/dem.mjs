@@ -1,0 +1,15 @@
+import { fromFile } from 'geotiff';
+import fs from 'node:fs';
+const [S,W,N,E] = [5.030, -75.545, 5.090, -75.485];
+const tiff = await fromFile('geo/dem.tif');
+const img = await tiff.getImage();
+const [ox, oy] = img.getOrigin(); const [rx, ry] = img.getResolution();
+const x0 = Math.floor((W - ox) / rx), x1 = Math.ceil((E - ox) / rx);
+const y0 = Math.floor((N - oy) / ry), y1 = Math.ceil((S - oy) / ry);
+const [data] = await img.readRasters({ window: [x0, y0, x1, y1] });
+const w = x1 - x0, h = y1 - y0;
+const out = { w, h, west: ox + x0 * rx, north: oy + y0 * ry, rx, ry, data: Array.from(data, (v) => Math.round(v * 10) / 10) };
+fs.writeFileSync('geo/dem-crop.json', JSON.stringify(out));
+const at = (lat, lon) => { const fx = (lon - out.west) / rx, fy = (lat - out.north) / ry; const i = Math.floor(fx), j = Math.floor(fy); const tx = fx - i, ty = fy - j; const g = (a, b) => data[b * w + a]; return g(i,j)*(1-tx)*(1-ty)+g(i+1,j)*tx*(1-ty)+g(i,j+1)*(1-tx)*ty+g(i+1,j+1)*tx*ty; };
+console.log('size', w, h, 'min', Math.min(...data), 'max', Math.max(...data));
+for (const [n, la, lo] of [['Plaza Bolivar', 5.0682, -75.5173], ['Chipre', 5.0705, -75.5260], ['steps 26A top?', 5.0580, -75.5146], ['Cable', 5.0560, -75.4920], ['Calle56 steps', 5.0688, -75.4884]]) console.log(n, at(la, lo).toFixed(0));

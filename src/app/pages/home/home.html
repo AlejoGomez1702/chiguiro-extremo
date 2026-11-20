@@ -1,0 +1,236 @@
+<section class="journey" #journey aria-label="Recorrido 3D por la pista de Manizales">
+  <div class="stage">
+    <app-descent-canvas [target]="s()" (ready)="ready.set(true)" />
+    <div class="shade"></div>
+
+    <!-- telemetría -->
+    <div class="hud" aria-hidden="true">
+      <div class="readout">
+        <span><small>Sección</small><b>{{ section() }}</b></span>
+        <span><small>Distancia</small><b>{{ km() }} km</b></span>
+        <span><small>Altitud</small><b>{{ alt() }} m</b></span>
+      </div>
+      <svg viewBox="0 -2 200 52" class="profile" preserveAspectRatio="none">
+        <path [attr.d]="profilePath + ' L200,48 L0,48 Z'" class="area" />
+        <path [attr.d]="profilePath" class="line" />
+        @for (m of sectionMarks; track m.s) {
+          <line [attr.x1]="m.x" [attr.x2]="m.x" y1="0" y2="48" class="tick" />
+        }
+        <circle [attr.cx]="marker().x" [attr.cy]="marker().y" r="2.6" class="dot" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- 0 · portada -->
+  <div class="chapter hero">
+    <div class="container hero-inner">
+      <div class="tags">
+        <span class="tag">Próxima carrera</span>
+        <span class="tag tag-line">Parada {{ race().num }} de 03</span>
+      </div>
+      <h1 class="display display-xl">{{ race().title }}</h1>
+      <p class="place">{{ race().place }}</p>
+      <div class="when">
+        <div class="date">
+          <b class="display">{{ race().dshort }}</b>
+          <span class="mono">{{ race().dsub }}</span>
+        </div>
+        @if (days() !== null) {
+          <div class="count">
+            <b class="display">{{ days() }}</b>
+            <span class="mono">días</span>
+          </div>
+        }
+      </div>
+      <div class="ctas">
+        <a class="btn" [routerLink]="['/carreras', race().id]">
+          Ver carrera
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn-ghost" [routerLink]="['/carreras', race().id]" fragment="trazado">Trazado 3D</a>
+      </div>
+    </div>
+    <button type="button" class="scroll-cue mono" (click)="go(1)">
+      Desliza para bajar la pista
+      <i></i>
+    </button>
+  </div>
+
+  <!-- 1 · temporada -->
+  <div class="chapter right">
+    <div class="container">
+      <div class="panel glass">
+        <span class="eyebrow">Temporada 2027</span>
+        <h2 class="display display-l">Tres paradas</h2>
+        <p class="lead">Colombia, Perú y México. Una ciudad empinada en cada país y una sola Copa.</p>
+        <ol class="season">
+          @for (r of data.races(); track r.id) {
+            <li>
+              <a [routerLink]="['/carreras', r.id]">
+                <span class="num display">{{ r.num }}</span>
+                <span class="who">
+                  <b>{{ r.title }}</b>
+                  <small>{{ r.place }}</small>
+                </span>
+                <span class="when-s">
+                  <b class="mono">{{ r.dshort }}</b>
+                  <span class="tag" [class.tag-ink-line]="r.status !== 'proxima'">{{ r.statusLabel }}</span>
+                </span>
+              </a>
+            </li>
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · escalinata / trazado -->
+  <div class="chapter left">
+    <div class="container">
+      <div class="panel glass">
+        <span class="eyebrow">Trazado real · Calle 23 → Calle 26A</span>
+        <h2 class="display display-l">Una pista que la ciudad ya tenía</h2>
+        <p class="lead">
+          Salida a pasos de la Catedral, bajada por la Carrera 31 y final por la escalinata de la Calle 26A. En Manizales la pista no se
+          construye: se descubre.
+        </p>
+        <dl class="facts">
+          @for (f of race().facts; track f.k) {
+            <div>
+              <dt class="mono">{{ f.k }}</dt>
+              <dd class="display">{{ f.v }}</dd>
+            </div>
+          }
+        </dl>
+        <p class="note">{{ race().factsNote }}</p>
+        <a class="link-arrow" [routerLink]="['/carreras', race().id]" fragment="trazado">Explorar el trazado en 3D →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · pilotos (salto) -->
+  <div class="chapter wide">
+    <div class="container">
+      <div class="panel glass">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">Corredores · solo por invitación</span>
+            <h2 class="display display-l">Pilotos invitados</h2>
+          </div>
+          <a class="link-arrow" routerLink="/corredores">Conoce a los corredores →</a>
+        </div>
+        <ul class="riders">
+          @for (r of featuredRiders(); track r.id) {
+            <li>
+              <a [routerLink]="['/corredores', r.id]">
+                <app-rider-avatar [rider]="r" />
+                <b class="display">{{ r.name }}</b>
+                <small class="mono">{{ r.country }}</small>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · vivir la carrera (curva / público) -->
+  <div class="chapter right">
+    <div class="container">
+      <div class="panel glass">
+        <span class="eyebrow">Zona de público B · Curva</span>
+        <h2 class="display display-l">Vívela desde la baranda</h2>
+        <p class="lead">Entrada libre a las zonas de público. La A para ver los saltos, la B para ir en familia.</p>
+        <ul class="schedule">
+          @for (sl of raceDay.slots; track sl.t) {
+            <li [class.now]="sl.now">
+              <span class="mono t">{{ sl.t }}</span>
+              <span>
+                <b>{{ sl.title }}</b>
+                <small>{{ sl.place }}</small>
+              </span>
+              @if (sl.now) {
+                <span class="tag">En vivo</span>
+              }
+            </li>
+          }
+        </ul>
+        <p class="note">{{ raceDay.day }} · horarios ilustrativos</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · cobertura (drop) -->
+  <div class="chapter left">
+    <div class="container">
+      <div class="panel glass">
+        <span class="eyebrow">Drop · plataforma de madera</span>
+        <h2 class="display display-l">Cobertura</h2>
+        <ul class="news">
+          @for (p of latest(); track p.id) {
+            <li>
+              <a [routerLink]="['/cobertura', p.id]">
+                <img [src]="p.img" alt="" loading="lazy" [style.object-position]="p.pos ?? 'center'" />
+                <span>
+                  <small class="mono">{{ p.date }} · {{ data.raceName(p.race) }}</small>
+                  <b>{{ p.title }}</b>
+                </span>
+              </a>
+            </li>
+          }
+        </ul>
+        <a class="link-arrow" routerLink="/cobertura">Toda la cobertura →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · tienda -->
+  <div class="chapter right">
+    <div class="container">
+      <div class="panel glass">
+        <span class="eyebrow">Tienda oficial</span>
+        <h2 class="display display-l">Colección Manizales</h2>
+        <ul class="shop">
+          @for (p of products(); track p.id) {
+            <li>
+              <a [routerLink]="['/tienda', p.id]">
+                <app-product-art [product]="p" />
+                <b>{{ p.name }}</b>
+                <span class="mono">{{ p.price }} USD</span>
+              </a>
+            </li>
+          }
+        </ul>
+        <a class="link-arrow" routerLink="/tienda">Ver la tienda →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 · meta -->
+  <div class="chapter finish">
+    <div class="container">
+      <div class="panel finish-panel">
+        <span class="eyebrow">Meta · pie de la escalinata</span>
+        <h2 class="display display-xl">Nos vemos<br />en la meta</h2>
+        <p class="lead">{{ race().insc }}. Premiación, tienda oficial y entrega de kits en la fan zone.</p>
+        <div class="ctas">
+          <a class="btn" [routerLink]="['/carreras', race().id]">Inscripción y horarios</a>
+          <a class="btn btn-ghost" routerLink="/carreras">Calendario completo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section allies" aria-labelledby="allies-t">
+  <div class="container">
+    <span class="eyebrow">Aliados</span>
+    <h2 id="allies-t" class="display display-m">Las ciudades y marcas que lo hacen posible</h2>
+    <ul>
+      @for (a of ['Alcaldía de Manizales', 'Marca de ejemplo', 'Bicicletas de ejemplo', 'Cascos de ejemplo', 'Energía de ejemplo', 'Medios aliados']; track a) {
+        <li class="mono">{{ a }}</li>
+      }
+    </ul>
+    <p class="note">Logos pendientes: se publican cuando los aliados confirmen.</p>
+  </div>
+</section>

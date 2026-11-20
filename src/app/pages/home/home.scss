@@ -1,0 +1,468 @@
+.journey {
+  position: relative;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* degradados para legibilidad del texto sobre la escena */
+.shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(18, 18, 18, 0.5) 0%, rgba(18, 18, 18, 0) 18%),
+    linear-gradient(0deg, rgba(18, 18, 18, 0.55) 0%, rgba(18, 18, 18, 0) 30%);
+}
+
+.hud {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 22px;
+  width: min(300px, 46vw);
+  display: grid;
+  gap: 6px;
+  pointer-events: none;
+  color: var(--bone);
+}
+.readout {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  span {
+    display: grid;
+  }
+  small {
+    font: 700 9.5px var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted-2);
+  }
+  b {
+    font: 800 14px var(--sans);
+    white-space: nowrap;
+  }
+}
+.profile {
+  width: 100%;
+  height: 46px;
+  overflow: visible;
+  .area {
+    fill: rgba(242, 239, 233, 0.12);
+  }
+  .line {
+    fill: none;
+    stroke: var(--bone);
+    stroke-width: 1.2;
+    vector-effect: non-scaling-stroke;
+  }
+  .tick {
+    stroke: rgba(242, 239, 233, 0.25);
+    stroke-dasharray: 2 3;
+    vector-effect: non-scaling-stroke;
+  }
+  .dot {
+    fill: var(--signal);
+    stroke: var(--ink);
+    stroke-width: 1;
+  }
+}
+
+/* capítulos superpuestos a la escena fija */
+.chapter {
+  position: relative;
+  z-index: 2;
+  min-height: 135vh;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  > .container {
+    width: 100%;
+  }
+}
+.panel {
+  pointer-events: auto;
+  padding: clamp(22px, 3vw, 36px);
+  max-width: 520px;
+  display: grid;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.8s var(--ease);
+  &.in {
+    opacity: 1;
+    transform: none;
+  }
+  h2 {
+    margin-top: -4px;
+  }
+}
+.right .panel {
+  margin-left: auto;
+}
+.wide .panel {
+  max-width: none;
+}
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* portada */
+.hero {
+  margin-top: -100vh;
+  margin-top: -100svh;
+  min-height: 100vh;
+  min-height: 100svh;
+  align-items: flex-end;
+  padding-bottom: clamp(96px, 14vh, 160px);
+  .hero-inner {
+    pointer-events: auto;
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35);
+  }
+  h1 {
+    color: var(--bone);
+    margin: 4px 0 -6px;
+  }
+  .tags {
+    display: flex;
+    gap: 8px;
+  }
+  .tag-line {
+    background: rgba(18, 18, 18, 0.5);
+  }
+  .place {
+    font-weight: 700;
+    font-size: 18px;
+  }
+}
+.when {
+  display: flex;
+  border: 2px solid var(--bone);
+  background: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(6px);
+  .date {
+    display: grid;
+    padding: 10px 16px;
+    b {
+      font-size: 40px;
+    }
+  }
+  .count {
+    display: grid;
+    align-content: center;
+    padding: 10px 14px;
+    background: var(--bone);
+    color: var(--ink);
+    text-align: center;
+    b {
+      font-size: 40px;
+    }
+  }
+  .mono {
+    font-size: 11px;
+    text-transform: uppercase;
+    text-shadow: none;
+  }
+}
+.ctas {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.scroll-cue {
+  pointer-events: auto;
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--bone);
+  text-transform: uppercase;
+  i {
+    width: 2px;
+    height: 34px;
+    background: linear-gradient(var(--signal), transparent);
+    animation: cue 1.8s infinite var(--ease);
+    transform-origin: top;
+  }
+}
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+/* temporada */
+.season {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  li + li {
+    border-top: 1px solid var(--line);
+  }
+  a {
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    text-decoration: none;
+  }
+  a:hover b {
+    color: var(--signal);
+  }
+  .num {
+    font-size: 40px;
+    color: var(--signal);
+  }
+  .who {
+    display: grid;
+    b {
+      font-size: 20px;
+    }
+    small {
+      color: var(--muted);
+    }
+  }
+  .when-s {
+    display: grid;
+    justify-items: end;
+    gap: 4px;
+  }
+}
+
+/* datos técnicos */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  margin: 0;
+  background: var(--line);
+  border: 1px solid var(--line);
+  div {
+    background: rgba(18, 18, 18, 0.6);
+    padding: 12px 14px;
+  }
+  dt {
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  dd {
+    margin: 2px 0 0;
+    font-size: 34px;
+  }
+}
+
+/* pilotos */
+.riders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  a {
+    display: grid;
+    gap: 8px;
+    text-decoration: none;
+  }
+  b {
+    font-size: 24px;
+    line-height: 0.95;
+  }
+  small {
+    color: var(--signal);
+    text-transform: uppercase;
+  }
+  app-rider-avatar {
+    transition: transform 0.4s var(--ease);
+  }
+  a:hover app-rider-avatar {
+    transform: translateY(-4px);
+  }
+}
+
+/* horario */
+.schedule {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  li {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+  }
+  .t {
+    color: var(--muted);
+  }
+  .now .t {
+    color: var(--signal);
+  }
+  span {
+    display: grid;
+  }
+  small {
+    color: var(--muted);
+  }
+}
+
+/* noticias */
+.news {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  a {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 14px;
+    align-items: center;
+    text-decoration: none;
+  }
+  img {
+    width: 96px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  span {
+    display: grid;
+    gap: 2px;
+  }
+  small {
+    color: var(--muted);
+    font-size: 11px;
+  }
+  b {
+    line-height: 1.25;
+  }
+  a:hover b {
+    color: var(--signal);
+  }
+}
+
+/* tienda */
+.shop {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  a {
+    display: grid;
+    gap: 6px;
+    text-decoration: none;
+  }
+  app-product-art {
+    border-radius: 3px;
+  }
+  b {
+    font-size: 13.5px;
+    line-height: 1.2;
+  }
+  .mono {
+    color: var(--muted);
+  }
+}
+
+/* meta */
+.finish {
+  min-height: 150vh;
+  align-items: flex-end;
+  padding-bottom: 18vh;
+}
+.finish-panel {
+  max-width: 760px;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.4);
+  padding: 0;
+}
+
+/* aliados */
+.allies {
+  position: relative;
+  z-index: 2;
+  background: var(--ink);
+  border-top: 1px solid var(--line);
+  ul {
+    list-style: none;
+    margin: 32px 0 16px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  li {
+    display: grid;
+    place-items: center;
+    min-height: 96px;
+    padding: 12px;
+    text-align: center;
+    background: var(--ink-2);
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 860px) {
+  .chapter {
+    min-height: 120vh;
+    align-items: flex-end;
+    padding-bottom: 12vh;
+  }
+  .panel {
+    max-width: none;
+  }
+  .riders {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hud {
+    top: calc(var(--header-h) + 8px);
+    bottom: auto;
+    width: auto;
+    left: var(--gutter);
+    .profile {
+      display: none;
+    }
+  }
+  .when .date b,
+  .when .count b {
+    font-size: 32px;
+  }
+}
