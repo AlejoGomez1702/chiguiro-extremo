@@ -126,7 +126,7 @@ export function textTexture(
   g.textAlign = 'center';
   g.textBaseline = 'middle';
   const lh = h / (lines.length + 0.4);
-  g.font = opts.font ?? `900 ${Math.round(lh * 0.82)}px "Big Shoulders Display", Impact, sans-serif`;
+  g.font = opts.font ?? `800 ${Math.round(lh * 0.72)}px "Bricolage Grotesque", Impact, sans-serif`;
   const rep = opts.repeat ?? 1;
   for (let r = 0; r < rep; r++) {
     lines.forEach((l, i) => g.fillText(l, (w / rep) * (r + 0.5), lh * (i + 0.7)));

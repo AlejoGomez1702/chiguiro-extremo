@@ -9,7 +9,7 @@ import { Product } from '../core/data/models';
     <svg viewBox="0 0 200 200" role="img" [attr.aria-label]="product().name">
       @switch (shape()) {
         @case ('poster') {
-          <rect x="52" y="30" width="96" height="140" [attr.fill]="fill()" stroke="#d8d2c6" />
+          <rect x="52" y="30" width="96" height="140" [attr.fill]="fill()" stroke="var(--color-light-border)" />
         }
         @case ('cap') {
           <path d="M40 120c0-40 25-62 60-62s60 22 60 62Z" [attr.fill]="fill()" />
@@ -37,7 +37,7 @@ import { Product } from '../core/data/models';
         }
       }
       @if (product().print) {
-        <text x="100" [attr.y]="textY()" text-anchor="middle" [attr.fill]="ink()" font-family="Big Shoulders Display" font-weight="900" [attr.font-size]="size()">
+        <text x="100" [attr.y]="textY()" text-anchor="middle" [attr.fill]="ink()" font-family="Bricolage Grotesque" font-weight="800" [attr.font-size]="size()">
           @for (l of lines(); track $index) {
             <tspan x="100" [attr.dy]="$index ? size() * 0.88 : 0">{{ l }}</tspan>
           }

@@ -21,7 +21,7 @@ import { ProductArt } from '../../shared/product-art';
           </div>
           <div class="info">
             <a routerLink="/tienda" class="back mono">← Tienda</a>
-            <span class="eyebrow">{{ p.col === 'copa' ? 'Copa 2027' : 'Edición ' + (data.race(p.col)?.short ?? '') }}</span>
+            <span class="eyebrow">{{ p.col === 'copa' ? 'Downtown 2027' : 'Edición ' + (data.race(p.col)?.short ?? '') }}</span>
             <h1 class="display display-m">{{ p.name }}</h1>
             <p class="price">{{ p.price }} USD</p>
             <p class="desc">{{ p.desc }}</p>
@@ -50,7 +50,7 @@ import { ProductArt } from '../../shared/product-art';
             <button type="button" class="btn add" (click)="add()">Agregar al carrito</button>
             <ul class="perks mono">
               <li>Retiro en la fan zone de la parada</li>
-              <li>Envío nacional en Colombia, Perú y México</li>
+              <li>Envío nacional en Colombia, Ecuador y México</li>
               <li>Cambios de talla hasta 30 días</li>
             </ul>
           </div>

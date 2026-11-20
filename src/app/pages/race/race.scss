@@ -1,7 +1,7 @@
 .head {
   padding-top: calc(var(--header-h) + clamp(32px, 6vw, 72px));
   background:
-    radial-gradient(70% 120% at 90% 0%, rgba(255, 91, 31, 0.22), transparent 60%),
+    radial-gradient(70% 120% at 90% 0%, color-mix(in srgb, var(--brand-primary) 38%, transparent), transparent 60%),
     var(--ink);
   border-bottom: 1px solid var(--line);
 }
@@ -278,7 +278,7 @@
     cursor: pointer;
     &:hover,
     &.sel {
-      background: rgba(255, 91, 31, 0.15);
+      background: var(--color-accent-soft);
     }
   }
   i {
@@ -370,7 +370,7 @@
   gap: 6px;
   text-decoration: none;
   .mono {
-    color: #6b665d;
+    color: var(--color-light-muted);
   }
 }
 .missing {

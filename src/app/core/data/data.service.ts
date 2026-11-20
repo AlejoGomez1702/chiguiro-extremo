@@ -1,14 +1,18 @@
 import { Injectable, WritableSignal, computed, signal } from '@angular/core';
-import { ACCESS, CAPTIONS, CREDITS, GENERIC_BODY, PINS, POSTS, PRODUCTS, RACES, RIDERS, SCHEDULE } from './mock-data';
-import { Post, Product, Race, Rider } from './models';
+import { ACCESS, CAPTIONS, CREDITS, EVENTS, GENERIC_BODY, PINS, POSTS, PRODUCTS, RACES, RIDERS, SCHEDULE } from './mock-data';
+import { Post, Product, Race, Rider, SiteEvent } from './models';
 
 /**
  * Fuente única de datos del sitio. Hoy trabaja en memoria con los datos del
  * demo; el dashboard escribe aquí. Para pasar a Supabase solo hay que cargar
- * estas señales desde las tablas equivalentes (races, riders, posts, products).
+ * estas señales desde las tablas equivalentes (events, races, riders, posts,
+ * products) y guardar featuredEventId en la configuración del sitio.
  */
 @Injectable({ providedIn: 'root' })
 export class DataService {
+  readonly events = signal<SiteEvent[]>(EVENTS);
+  /** evento principal: protagoniza el inicio y da la marca a todo el sitio */
+  readonly featuredEventId = signal(EVENTS[0].id);
   readonly races = signal<Race[]>(RACES);
   readonly riders = signal<Rider[]>(RIDERS);
   readonly posts = signal<Post[]>(POSTS);
@@ -20,9 +24,17 @@ export class DataService {
   readonly captions = CAPTIONS;
   readonly credits = CREDITS;
 
-  readonly nextRace = computed(() => this.races().find((r) => r.isNext) ?? this.races()[0]);
+  readonly featured = computed(() => this.events().find((e) => e.id === this.featuredEventId()) ?? this.events()[0]);
+  /** eventos visibles en el sitio (los borradores solo existen en el panel) */
+  readonly publicEvents = computed(() => this.events().filter((e) => e.status !== 'borrador'));
+  /** paradas del evento principal */
+  readonly mainRaces = computed(() => this.racesOf(this.featured().id));
+  readonly nextRace = computed(() => this.nextRaceOf(this.featured().id) ?? this.races()[0]);
   readonly categories = computed(() => [...new Set(this.riders().map((r) => r.category))]);
 
+  event(id: string) {
+    return this.events().find((e) => e.id === id);
+  }
   race(id: string) {
     return this.races().find((r) => r.id === id);
   }
@@ -36,10 +48,34 @@ export class DataService {
     return this.products().find((p) => p.id === id);
   }
   raceName(id: string) {
-    return id === 'copa' ? 'Copa general' : `Parada ${this.race(id)?.num} · ${this.race(id)?.short}`;
+    return id === 'copa' ? 'Evento general' : `Parada ${this.race(id)?.num} · ${this.race(id)?.short}`;
   }
   postsFor(raceId: string) {
     return this.posts().filter((p) => p.race === raceId);
+  }
+
+  // --- contenido por evento ------------------------------------------------
+  racesOf(eventId: string) {
+    return this.races().filter((r) => r.eventId === eventId);
+  }
+  nextRaceOf(eventId: string): Race | undefined {
+    const list = this.racesOf(eventId);
+    return list.find((r) => r.isNext) ?? list[0];
+  }
+  /** ¿el contenido ligado a `ref` (id de parada o 'copa') pertenece al evento? */
+  private belongs(ref: string, eventId: string, own?: string) {
+    if (ref === 'copa') return (own ?? this.featuredEventId()) === eventId;
+    return this.race(ref)?.eventId === eventId;
+  }
+  postsOf(eventId: string) {
+    return this.posts().filter((p) => this.belongs(p.race, eventId, p.eventId));
+  }
+  productsOf(eventId: string) {
+    return this.products().filter((p) => this.belongs(p.col, eventId));
+  }
+  ridersOf(eventId: string) {
+    const ids = new Set(this.racesOf(eventId).map((r) => r.id));
+    return this.riders().filter((r) => r.races.some((id) => ids.has(id)));
   }
 
   /** Días hasta una fecha tipo "9 ENE 2027". */
@@ -66,4 +102,4 @@ export class DataService {
   }
 }
 
-export type Collection = 'races' | 'riders' | 'posts' | 'products';
+export type Collection = 'events' | 'races' | 'riders' | 'posts' | 'products';

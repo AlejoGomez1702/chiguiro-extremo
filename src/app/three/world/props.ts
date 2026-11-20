@@ -128,7 +128,7 @@ export function buildProps(track: Track, geo: GeoData, assets: Assets, quality: 
     }
   }
   const fenceMesh = new InstancedMesh(fenceGeometry(panel), new MeshStandardMaterial({ color: '#9aa0a6', metalness: 0.8, roughness: 0.35 }), fences.length);
-  const bannerTex = textTexture(['COPA LATAM DH', 'DOWNHILL URBANO 2027'], { w: 1024, h: 256 });
+  const bannerTex = textTexture(['DOWNTOWN', 'SERIE LATINOAMÉRICA 2027'], { w: 1024, h: 256 });
   const bannerTex2 = textTexture(['MANIZALES · PARADA 01'], { w: 1024, h: 256, bg: '#121212', fg: '#FF5B1F' });
   const bannerGeo = new PlaneGeometry(panel - 0.06, 0.78);
   bannerGeo.translate(0, 0.55, 0);

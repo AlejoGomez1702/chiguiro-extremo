@@ -1,10 +1,11 @@
 // Datos de ejemplo tomados del demo aprobado por el cliente.
 // Se reemplazarán por consultas a Supabase (ver DataService).
-import { Access, Pin, Post, Product, Race, Rider, ScheduleDay } from "./models";
+import { Access, Pin, Post, Product, Race, Rider, ScheduleDay, SiteEvent } from "./models";
 
 export const RACES: Race[] = [
   {
     "id": "mzl",
+    "eventId": "downtown-latam-2027",
     "num": "01",
     "code": "CO",
     "title": "Manizales",
@@ -32,11 +33,12 @@ export const RACES: Race[] = [
     "kits": "El viernes 8 de enero en la fan zone (punto M del trazado ilustrativo)."
   },
   {
-    "id": "per",
+    "id": "ecu",
+    "eventId": "downtown-latam-2027",
     "num": "02",
-    "code": "PE",
-    "title": "Perú",
-    "short": "Perú",
+    "code": "EC",
+    "title": "Ecuador",
+    "short": "Ecuador",
     "place": "Ciudad por anunciar",
     "date": "Domingo 7 de febrero de 2027",
     "dshort": "7 FEB 2027",
@@ -74,6 +76,7 @@ export const RACES: Race[] = [
   },
   {
     "id": "mex",
+    "eventId": "downtown-latam-2027",
     "num": "03",
     "code": "MX",
     "title": "México",
@@ -284,7 +287,7 @@ export const POSTS: Post[] = [
     "id": "c9",
     "type": "cronica",
     "race": "mzl",
-    "title": "La ciudad de las pendientes recibe a la Copa",
+    "title": "La ciudad de las pendientes recibe a Downtown",
     "dek": "Manizales abre la temporada el 9 de enero: por qué sus calles empinadas son un escenario natural para el descenso urbano.",
     "date": "10 nov 2026",
     "img": "/assets/img/escena-salto.svg",
@@ -343,8 +346,8 @@ export const POSTS: Post[] = [
     "id": "c1",
     "type": "noticia",
     "race": "copa",
-    "title": "Calendario 2027: Colombia, Perú y México",
-    "dek": "La Copa arranca el 9 de enero en Manizales, sigue el 7 de febrero en Perú y cierra en marzo en México.",
+    "title": "Calendario 2027: Colombia, Ecuador y México",
+    "dek": "La serie arranca el 9 de enero en Manizales, sigue el 7 de febrero en Ecuador y cierra en marzo en México.",
     "date": "04 nov 2026",
     "img": "/assets/img/escena-escalinata.svg",
     "pos": "40% 50%",
@@ -364,8 +367,8 @@ export const POSTS: Post[] = [
   {
     "id": "c6",
     "type": "noticia",
-    "race": "per",
-    "title": "Perú será la Parada 02: domingo 7 de febrero",
+    "race": "ecu",
+    "title": "Ecuador será la Parada 02: domingo 7 de febrero",
     "dek": "La ciudad sede se anunciará en las próximas semanas.",
     "date": "30 oct 2026",
     "img": "/assets/img/escena-callejon.svg",
@@ -385,7 +388,7 @@ export const POSTS: Post[] = [
     "id": "c7",
     "type": "galeria",
     "race": "copa",
-    "title": "Presentación oficial de la Copa",
+    "title": "Presentación oficial de Downtown",
     "dek": "Corredores, organizadores y aliados en el lanzamiento de la temporada.",
     "date": "28 oct 2026",
     "img": "/assets/img/escena-salto.svg",
@@ -456,12 +459,12 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": "p1",
-    "name": "Camiseta oficial Copa 2027",
+    "name": "Camiseta oficial Downtown 2027",
     "col": "copa",
     "type": "ropa",
     "price": 32,
     "kind": "tee",
-    "print": "COPA\nDH 27",
+    "print": "DNTN\n27",
     "colors": [
       {
         "n": "Asfalto",
@@ -536,7 +539,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": "p3",
-    "name": "Gorra Copa 2027",
+    "name": "Gorra Downtown 2027",
     "col": "copa",
     "type": "acc",
     "price": 24,
@@ -589,12 +592,12 @@ export const PRODUCTS: Product[] = [
   },
   {
     "id": "p8",
-    "name": "Hoodie Edición Perú",
-    "col": "per",
+    "name": "Hoodie Edición Ecuador",
+    "col": "ecu",
     "type": "ropa",
     "price": 54,
     "kind": "hoodie",
-    "print": "PER\n02",
+    "print": "ECU\n02",
     "colors": [
       {
         "n": "Añil",
@@ -625,7 +628,7 @@ export const RIDERS: Rider[] = [
     "plate": "07",
     "races": [
       "mzl",
-      "per"
+      "ecu"
     ],
     "bg": "#FF5B1F",
     "fg": "#121212",
@@ -643,14 +646,14 @@ export const RIDERS: Rider[] = [
     "plate": "21",
     "races": [
       "mzl",
-      "per"
+      "ecu"
     ],
     "bg": "#2A2A2A",
     "fg": "#FF5B1F",
-    "desc": "Corre en casa la Parada 02. Rápido en callejones estrechos.",
+    "desc": "Rápido en callejones estrechos y escaleras cortas.",
     "team": "Por confirmar",
     "feat": "",
-    "career": "Enduro y descenso en los Andes peruanos.",
+    "career": "Enduro y descenso en los Andes.",
     "category": "Élite Hombres"
   },
   {
@@ -678,7 +681,7 @@ export const RIDERS: Rider[] = [
     "plate": "03",
     "races": [
       "mzl",
-      "per"
+      "ecu"
     ],
     "bg": "#1A1A1A",
     "fg": "#ECE8E0",
@@ -699,7 +702,7 @@ export const RIDERS: Rider[] = [
     ],
     "bg": "#A8432A",
     "fg": "#F2EFE9",
-    "desc": "Debuta en la Copa tras una temporada fuerte en su país.",
+    "desc": "Debuta en Downtown tras una temporada fuerte en su país.",
     "team": "",
     "feat": "",
     "career": "",
@@ -713,7 +716,7 @@ export const RIDERS: Rider[] = [
     "plate": "01",
     "races": [
       "mzl",
-      "per"
+      "ecu"
     ],
     "bg": "#FF5B1F",
     "fg": "#2A2A2A",
@@ -730,7 +733,7 @@ export const RIDERS: Rider[] = [
     "country": "Brasil",
     "plate": "44",
     "races": [
-      "per"
+      "ecu"
     ],
     "bg": "#2B3A67",
     "fg": "#F2EFE9",
@@ -747,11 +750,12 @@ export const RIDERS: Rider[] = [
     "country": "Ecuador",
     "plate": "09",
     "races": [
-      "mzl"
+      "mzl",
+      "ecu"
     ],
     "bg": "#ECE8E0",
     "fg": "#A8432A",
-    "desc": "Joven promesa invitada a su primera Copa.",
+    "desc": "Corre en casa la Parada 02. Joven promesa en su primera serie.",
     "team": "",
     "feat": "",
     "career": "Categoría juvenil hasta 2026.",
@@ -761,7 +765,7 @@ export const RIDERS: Rider[] = [
 
 export const GENERIC_BODY: string[] = [
   "Texto de ejemplo. Aquí va el cuerpo de la publicación, que la organización escribe y edita desde el panel de administración: puede guardarla como borrador, elegir una portada y publicarla o programarla.",
-  "Cada publicación se asocia a una carrera o a la Copa en general. Con eso aparece sola en la ficha de la sede correspondiente, sin cargarla dos veces.",
+  "Cada publicación se asocia a una parada o al evento en general. Con eso aparece sola en la ficha de la sede correspondiente, sin cargarla dos veces.",
   "Los datos pendientes se muestran como «Por anunciar» hasta que el organizador los confirme."
 ];
 
@@ -780,3 +784,72 @@ export const CREDITS: string[] = [
   "Productos: siluetas ilustrativas."
 ];
 
+
+const MODULES_ALL: SiteEvent["modules"] = [
+  { key: "paradas", on: true },
+  { key: "trazado", on: true },
+  { key: "corredores", on: true },
+  { key: "cobertura", on: true },
+  { key: "tienda", on: true },
+  { key: "aliados", on: true },
+];
+
+/** Eventos de ejemplo: el principal es real en estructura; el histórico y el borrador son ilustrativos. */
+export const EVENTS: SiteEvent[] = [
+  {
+    id: "downtown-latam-2027",
+    name: "Downtown",
+    series: "Serie Latinoamérica",
+    kind: "serie",
+    status: "publicado",
+    year: 2027,
+    dateLabel: "Enero a marzo de 2027",
+    place: "Colombia, Ecuador y México",
+    summary: "Descenso urbano por invitación en tres ciudades empinadas de la región. Escaleras, muros y barandas: la pista es la ciudad.",
+    theme: { brand: "latam", treatment: "intense", surface: "energy", title: "color", trail: "horizonte" },
+    cover: { line1: "Down", line2: "Town", arrow: true, kickerLeft: "Downtown", kickerRight: "Serie Latinoamérica 2027" },
+    modules: MODULES_ALL,
+  },
+  {
+    id: "downtown-colombia-2026",
+    name: "Downtown Colombia",
+    series: "Edición piloto",
+    kind: "unico",
+    status: "archivado",
+    year: 2026,
+    dateLabel: "Octubre de 2026",
+    place: "Manizales, Colombia",
+    summary: "La primera bajada: una sola ciudad para probar el formato antes de la serie. Evento de ejemplo.",
+    theme: { brand: "colombia", treatment: "intense", surface: "primary", title: "color", trail: "espejo" },
+    cover: { line1: "Colom", line2: "bia", arrow: true, kickerLeft: "Downtown", kickerRight: "Edición piloto 2026" },
+    modules: MODULES_ALL,
+  },
+  {
+    id: "chiguiro-night-run-2026",
+    name: "Night Run",
+    series: "Chigüiro Extremo",
+    kind: "unico",
+    status: "archivado",
+    year: 2026,
+    dateLabel: "Junio de 2026",
+    place: "Quito, Ecuador",
+    summary: "Carrera nocturna de exhibición por el centro histórico. Evento de ejemplo.",
+    theme: { brand: "ecuador", treatment: "pastel", surface: "highlight", title: "ink", trail: "superior" },
+    cover: { line1: "Night", line2: "Run", arrow: true, kickerLeft: "Chigüiro Extremo", kickerRight: "Quito 2026" },
+    modules: MODULES_ALL,
+  },
+  {
+    id: "downtown-mexico-2028",
+    name: "Downtown México",
+    series: "En preparación",
+    kind: "unico",
+    status: "borrador",
+    year: 2028,
+    dateLabel: "Por anunciar",
+    place: "México",
+    summary: "Borrador de ejemplo: no se ve en el sitio hasta publicarlo.",
+    theme: { brand: "mexico", treatment: "intense", surface: "energy", title: "ink", trail: "horizonte" },
+    cover: { line1: "Méxi", line2: "co", arrow: true, kickerLeft: "Downtown", kickerRight: "2028" },
+    modules: MODULES_ALL,
+  },
+];

@@ -19,7 +19,6 @@ const TYPES: { v: PostType; label: string }[] = [
   template: `
     <header class="adm-head">
       <div>
-        <span class="eyebrow">03 · Noticias</span>
         <h1 class="display display-m">Cobertura</h1>
         <p>Noticias, crónicas, galerías y videos de cada parada.</p>
       </div>
@@ -55,7 +54,7 @@ const TYPES: { v: PostType; label: string }[] = [
               <label class="adm-fld">
                 <span>Parada</span>
                 <select formControlName="race">
-                  <option value="copa">Copa general</option>
+                  <option value="copa">Evento general</option>
                   @for (r of data.races(); track r.id) {
                     <option [value]="r.id">Parada {{ r.num }} · {{ r.short }}</option>
                   }

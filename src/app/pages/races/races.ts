@@ -8,13 +8,13 @@ import { PageHead } from '../../shared/page-head';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, PageHead],
   template: `
-    <app-page-head eyebrow="Temporada 2027" title="Carreras" lead="Calendario de las tres paradas y clasificación general de la Copa." />
+    <app-page-head eyebrow="Downtown 2027" title="Paradas" lead="Calendario de las tres paradas y clasificación general de la serie." />
 
     <section class="section" aria-labelledby="cal-t">
       <div class="container">
         <h2 id="cal-t" class="display display-m">Calendario</h2>
         <ol class="cal">
-          @for (r of data.races(); track r.id) {
+          @for (r of data.mainRaces(); track r.id) {
             <li [class.next]="r.isNext">
               <a [routerLink]="['/carreras', r.id]">
                 <figure>
@@ -42,7 +42,7 @@ import { PageHead } from '../../shared/page-head';
 
     <section class="section section-light" aria-labelledby="gen-t">
       <div class="container">
-        <span class="eyebrow">Copa general</span>
+        <span class="eyebrow">Evento general</span>
         <h2 id="gen-t" class="display display-m">Clasificación general</h2>
         <div class="filters" role="tablist" aria-label="Categoría">
           @for (c of categories(); track c) {
@@ -57,7 +57,7 @@ import { PageHead } from '../../shared/page-head';
                 <th scope="col">Pos.</th>
                 <th scope="col">Piloto</th>
                 <th scope="col">País</th>
-                @for (r of data.races(); track r.id) {
+                @for (r of data.mainRaces(); track r.id) {
                   <th scope="col" class="num">P{{ r.num }}</th>
                 }
                 <th scope="col" class="num">Total</th>
@@ -74,7 +74,7 @@ import { PageHead } from '../../shared/page-head';
                     </a>
                   </td>
                   <td class="mono">{{ row.cc }}</td>
-                  @for (r of data.races(); track r.id) {
+                  @for (r of data.mainRaces(); track r.id) {
                     <td class="num mono">—</td>
                   }
                   <td class="num total">0</td>
@@ -129,7 +129,7 @@ import { PageHead } from '../../shared/page-head';
       font-size: 72px;
       color: var(--line-2);
     }
-    .num {
+    figure .num {
       position: absolute;
       left: 12px;
       bottom: 6px;
@@ -159,7 +159,7 @@ import { PageHead } from '../../shared/page-head';
       margin: 24px 0 16px;
     }
     .filters button {
-      border: 1px solid #cfc9bd;
+      border: 1px solid var(--color-light-border);
       background: transparent;
       padding: 8px 14px;
       border-radius: 3px;
@@ -174,7 +174,7 @@ import { PageHead } from '../../shared/page-head';
     }
     .table-wrap {
       overflow-x: auto;
-      border: 1px solid #ddd6c8;
+      border: 1px solid var(--color-light-border);
       border-radius: 4px;
       background: #fff;
     }
@@ -188,13 +188,13 @@ import { PageHead } from '../../shared/page-head';
       letter-spacing: 0.08em;
       text-transform: uppercase;
       text-align: left;
-      color: #6b665d;
+      color: var(--color-light-muted);
       padding: 12px 14px;
-      border-bottom: 1px solid #ddd6c8;
+      border-bottom: 1px solid var(--color-light-border);
     }
     td {
       padding: 12px 14px;
-      border-bottom: 1px solid #eee8dc;
+      border-bottom: 1px solid var(--dt-gray-100);
       color: var(--ink);
     }
     td a {
@@ -226,7 +226,7 @@ import { PageHead } from '../../shared/page-head';
     }
     .note {
       margin-top: 12px;
-      color: #6b665d;
+      color: var(--color-light-muted);
     }
   `,
 })

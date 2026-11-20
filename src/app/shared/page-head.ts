@@ -20,7 +20,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       display: block;
       padding: calc(var(--header-h) + clamp(40px, 7vw, 88px)) 0 clamp(32px, 5vw, 56px);
       background:
-        radial-gradient(80% 120% at 85% 0%, rgba(255, 91, 31, 0.16), transparent 60%),
+        radial-gradient(80% 120% at 85% 0%, color-mix(in srgb, var(--brand-primary) 30%, transparent), transparent 60%),
         var(--ink);
       border-bottom: 1px solid var(--line);
     }

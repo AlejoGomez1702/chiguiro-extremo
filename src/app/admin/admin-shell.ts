@@ -16,12 +16,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       <aside class="adm-side" aria-label="Secciones del panel">
         <div class="adm-brand">
           <span class="eyebrow">Panel</span>
-          <strong class="display">Copa LATAM DH</strong>
+          <strong>Chigüiro Extremo</strong>
         </div>
         <nav class="adm-nav">
           @for (l of links; track l.path) {
             <a [routerLink]="l.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: l.exact }">
-              <span class="mono">{{ l.n }}</span>{{ l.label }}
+              {{ l.label }}
             </a>
           }
         </nav>
@@ -63,8 +63,9 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       padding-inline: 8px;
     }
     .adm-brand strong {
-      font-size: 26px;
-      line-height: 0.95;
+      font: var(--type-h3);
+      font-size: 22px;
+      letter-spacing: -0.02em;
     }
     .adm-nav {
       display: flex;
@@ -77,7 +78,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       gap: 12px;
       padding: 10px 12px;
       border-radius: var(--radius);
-      font-weight: 700;
+      font-weight: 500;
       font-size: 15px;
       text-decoration: none;
       color: var(--muted-2);
@@ -88,7 +89,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
     .adm-nav a .mono {
       color: var(--muted-3);
-      font-size: 11px;
+      font-size: 13px;
     }
     .adm-nav a:hover {
       background: var(--ink-3);
@@ -124,10 +125,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       padding: 10px 14px;
       border: 1px dashed var(--line-2);
       border-radius: var(--radius);
-      font-family: var(--mono);
+      font-family: var(--font-primary);
       font-size: 12px;
       color: var(--muted-2);
-      background: rgba(255, 91, 31, 0.05);
+      background: var(--color-accent-soft);
     }
 
     @media (max-width: 860px) {
@@ -186,15 +187,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     .adm-card {
       background: var(--ink-2);
       border: 1px solid var(--line);
-      border-radius: 6px;
+      border-radius: var(--radius-m);
       padding: 20px;
     }
     .adm-card h2 {
-      font-family: var(--display);
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: 24px;
-      line-height: 1;
+      font: var(--type-h3);
+      font-size: 22px;
+      letter-spacing: -0.02em;
       margin-bottom: 16px;
     }
     .adm-toolbar {
@@ -204,11 +203,9 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       margin-bottom: 16px;
     }
     .adm-chip {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-family: var(--font-primary);
+      font-size: 13px;
+      font-weight: 500;
       padding: 7px 12px;
       border-radius: 999px;
       border: 1px solid var(--line-2);
@@ -228,7 +225,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     .adm-table-wrap {
       overflow-x: auto;
       border: 1px solid var(--line);
-      border-radius: 6px;
+      border-radius: var(--radius-m);
     }
     .adm-table {
       width: 100%;
@@ -237,12 +234,10 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
     .adm-table th {
       text-align: left;
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-family: var(--font-primary);
+      font-size: 13px;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 500;
       padding: 12px 14px;
       background: var(--ink-2);
       border-bottom: 1px solid var(--line);
@@ -260,7 +255,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       background: var(--ink-3);
     }
     .adm-table tr.is-editing {
-      background: rgba(255, 91, 31, 0.08);
+      background: var(--color-accent-soft);
     }
     .adm-table .muted {
       color: var(--muted);
@@ -277,15 +272,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       gap: 6px;
       min-height: 32px;
       padding: 0 12px;
-      border-radius: 3px;
+      border-radius: var(--radius-s);
       border: 1px solid var(--line-2);
       background: transparent;
       color: var(--bone);
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-family: var(--font-primary);
+      font-size: 13px;
+      font-weight: 500;
       text-decoration: none;
       cursor: pointer;
     }
@@ -293,8 +286,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       border-color: var(--bone);
     }
     .adm-btn.danger {
-      color: #ff8a65;
-      border-color: rgba(255, 91, 31, 0.4);
+      color: var(--dt-danger);
+      border-color: color-mix(in srgb, var(--dt-danger) 45%, transparent);
     }
     .adm-btn.danger:hover {
       background: var(--signal);
@@ -334,11 +327,9 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
     .adm-fld > span,
     .adm-legend {
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-family: var(--font-primary);
+      font-size: 13px;
+      font-weight: 500;
       color: var(--muted);
     }
     .adm-fld small {
@@ -354,7 +345,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       background: var(--ink);
       color: var(--bone);
       border: 1px solid var(--line-2);
-      border-radius: 3px;
+      border-radius: var(--radius-s);
       font: inherit;
       font-size: 15px;
     }
@@ -372,7 +363,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
     .adm input.ng-invalid.ng-touched,
     .adm select.ng-invalid.ng-touched {
-      border-color: #ff8a65;
+      border-color: var(--dt-danger);
     }
     .adm input[type='checkbox'],
     .adm input[type='radio'] {
@@ -386,7 +377,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       padding: 2px;
       background: var(--ink);
       border: 1px solid var(--line-2);
-      border-radius: 3px;
+      border-radius: var(--radius-s);
       cursor: pointer;
     }
     .adm-chk {
@@ -419,15 +410,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       border-top: 1px solid var(--line);
     }
     .adm-err {
-      color: #ff8a65;
-      font-family: var(--mono);
+      color: var(--dt-danger);
+      font-family: var(--font-primary);
       font-size: 12px;
     }
     .adm-empty {
       padding: 32px;
       text-align: center;
       color: var(--muted);
-      font-family: var(--mono);
+      font-family: var(--font-primary);
       font-size: 12px;
     }
     .adm-swatch {
@@ -451,9 +442,10 @@ export default class AdminShell {
   protected links = [
     { path: '/admin', label: 'Resumen', n: '00', exact: true },
     { path: '/admin/eventos', label: 'Eventos', n: '01', exact: false },
-    { path: '/admin/corredores', label: 'Corredores', n: '02', exact: false },
-    { path: '/admin/noticias', label: 'Noticias', n: '03', exact: false },
-    { path: '/admin/productos', label: 'Productos', n: '04', exact: false },
-    { path: '/admin/inicio', label: 'Inicio y galería', n: '05', exact: false },
+    { path: '/admin/paradas', label: 'Paradas', n: '02', exact: false },
+    { path: '/admin/corredores', label: 'Riders', n: '03', exact: false },
+    { path: '/admin/noticias', label: 'Cobertura', n: '04', exact: false },
+    { path: '/admin/productos', label: 'Tienda', n: '05', exact: false },
+    { path: '/admin/inicio', label: 'Evento principal', n: '06', exact: false },
   ];
 }

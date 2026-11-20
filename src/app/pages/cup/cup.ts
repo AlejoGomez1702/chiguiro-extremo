@@ -8,7 +8,7 @@ import { PageHead } from '../../shared/page-head';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, PageHead],
   template: `
-    <app-page-head eyebrow="La Copa" title="Descenso urbano latinoamericano" lead="Una copa por invitación que lleva el downhill a las calles más empinadas de la región: escaleras, muros, barandas y plazas llenas de público." />
+    <app-page-head eyebrow="Downtown" title="Descenso urbano latinoamericano" lead="Una serie por invitación que lleva el downhill a las calles más empinadas de la región: escaleras, muros, barandas y plazas llenas de público." />
 
     <section class="section">
       <div class="container cols">
@@ -35,7 +35,7 @@ import { PageHead } from '../../shared/page-head';
             <b class="display">03</b>
             <div>
               <h3>Final</h3>
-              <p>Una sola bajada contra el reloj. El mejor tiempo gana la parada y suma puntos a la Copa general.</p>
+              <p>Una sola bajada contra el reloj. El mejor tiempo gana la parada y suma puntos a la clasificación general.</p>
             </div>
           </li>
         </ol>
@@ -158,7 +158,7 @@ import { PageHead } from '../../shared/page-head';
     }
     .cats li {
       padding: 20px;
-      border: 1px solid #ddd6c8;
+      border: 1px solid var(--color-light-border);
       border-radius: 4px;
       background: #fff;
       display: grid;
@@ -169,7 +169,7 @@ import { PageHead } from '../../shared/page-head';
       text-transform: uppercase;
     }
     .cats .mono {
-      color: #6b665d;
+      color: var(--color-light-muted);
     }
     .faq {
       margin-top: 24px;
@@ -213,7 +213,7 @@ import { PageHead } from '../../shared/page-head';
     select,
     textarea {
       padding: 10px 12px;
-      border: 1px solid #c9c2b4;
+      border: 1px solid var(--color-light-border);
       border-radius: 3px;
       background: #fff;
       color: var(--ink);
@@ -226,7 +226,7 @@ import { PageHead } from '../../shared/page-head';
     .cta {
       text-align: center;
       background:
-        radial-gradient(60% 120% at 50% 100%, rgba(255, 91, 31, 0.25), transparent 70%),
+        radial-gradient(60% 120% at 50% 100%, color-mix(in srgb, var(--brand-primary) 45%, transparent), transparent 70%),
         var(--ink);
     }
     .cta .container {
@@ -246,9 +246,9 @@ export default class Cup {
   protected open = signal(0);
   protected sent = signal(false);
   protected faq = [
-    { q: '¿Quién puede correr?', a: 'La Copa es por invitación. La organización invita pilotos por su trayectoria en descenso urbano y en campeonatos nacionales.' },
+    { q: '¿Quién puede correr?', a: 'Downtown es por invitación. La organización invita pilotos por su trayectoria en descenso urbano y en campeonatos nacionales.' },
     { q: '¿Qué equipo de protección es obligatorio?', a: 'Casco integral certificado, protector de espalda, rodilleras, guantes de dedo completo y calzado cerrado.' },
-    { q: '¿Cómo se otorgan los puntos?', a: 'Cada final reparte puntos por posición. La suma de las tres paradas define al campeón de la Copa general por categoría.' },
+    { q: '¿Cómo se otorgan los puntos?', a: 'Cada final reparte puntos por posición. La suma de las tres paradas define al campeón de la serie por categoría.' },
     { q: '¿El público paga entrada?', a: 'Las zonas de público son de acceso libre salvo que la sede indique lo contrario. Se publica en la ficha de cada carrera.' },
   ];
   protected countIn(c: string) {

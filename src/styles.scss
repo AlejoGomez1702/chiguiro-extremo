@@ -1,47 +1,158 @@
 /* ==========================================================================
-   Copa LATAM DH · sistema visual (tomado del demo aprobado)
+   Chigüiro Extremo · sistema visual Downtown (Figma "Downtown — Chigüiro Extremo")
+   Tres capas de tokens:
+     1. primitivos  → valores crudos del Figma
+     2. marca       → paleta del evento activo (la reescribe ThemeService)
+     3. semánticos  → lo que consumen los componentes
    ========================================================================== */
 
-@font-face { font-family: 'Archivo'; font-weight: 400; font-display: swap; src: url(/assets/fonts/archivo-latin-400-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Archivo'; font-weight: 500; font-display: swap; src: url(/assets/fonts/archivo-latin-500-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Archivo'; font-weight: 600; font-display: swap; src: url(/assets/fonts/archivo-latin-600-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Archivo'; font-weight: 700; font-display: swap; src: url(/assets/fonts/archivo-latin-700-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Archivo'; font-weight: 800; font-display: swap; src: url(/assets/fonts/archivo-latin-800-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Big Shoulders Display'; font-weight: 700; font-display: swap; src: url(/assets/fonts/big-shoulders-display-latin-700-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Big Shoulders Display'; font-weight: 800; font-display: swap; src: url(/assets/fonts/big-shoulders-display-latin-800-normal.woff2) format('woff2'); }
-@font-face { font-family: 'Big Shoulders Display'; font-weight: 900; font-display: swap; src: url(/assets/fonts/big-shoulders-display-latin-900-normal.woff2) format('woff2'); }
-@font-face { font-family: 'JetBrains Mono'; font-weight: 500; font-display: swap; src: url(/assets/fonts/jetbrains-mono-latin-500-normal.woff2) format('woff2'); }
-@font-face { font-family: 'JetBrains Mono'; font-weight: 700; font-display: swap; src: url(/assets/fonts/jetbrains-mono-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Bricolage Grotesque'; font-weight: 200 800; font-display: swap; src: url(/assets/fonts/bricolage-grotesque-latin-var.woff2) format('woff2'); }
+@font-face { font-family: 'Roboto'; font-weight: 400; font-display: swap; src: url(/assets/fonts/roboto-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Roboto'; font-weight: 500; font-display: swap; src: url(/assets/fonts/roboto-latin-500-normal.woff2) format('woff2'); }
 
 :root {
-  --ink: #121212;
-  --ink-2: #161616;
-  --ink-3: #1c1c1c;
-  --ink-4: #2a2a2a;
-  --line: #2e2e2e;
-  --line-2: #4a4a4a;
-  --bone: #f2efe9;
-  --bone-2: #f7f5f0;
-  --paper: #ece8e0;
-  --sand: #ddd7cb;
-  --muted: #a8a39a;
-  --muted-2: #cfcac1;
-  --muted-3: #8a857c;
-  --signal: #ff5b1f;
-  --brick: #a8432a;
-  --indigo: #2b3a67;
+  /* --- 1 · primitivos ---------------------------------------------------- */
+  --dt-black: #000000;
+  --dt-ink: #050505;
+  --dt-gray-900: #141513; /* 900–600: derivados para superficies oscuras */
+  --dt-gray-800: #1e1f1c;
+  --dt-gray-700: #2c2e29;
+  --dt-gray-600: #4a4c46;
+  --dt-gray-500: #666963;
+  --dt-gray-400: #8a8d85;
+  --dt-gray-300: #a9aca5;
+  --dt-gray-200: #cdd0c8;
+  --dt-gray-150: #d5d7d0;
+  --dt-gray-100: #e6e7e3;
+  --dt-gray-50: #f5f6f2;
+  --dt-white: #ffffff;
+  --dt-danger: #ff8a7a;
 
-  --display: 'Big Shoulders Display', 'Archivo', sans-serif;
-  --sans: 'Archivo', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  /* --- 2 · marca (LATAM por defecto) ------------------------------------- */
+  --brand-primary: #7337f1;
+  --brand-energy: #0ee973;
+  --brand-signal: #ebda00;
+  --brand-warm: #ff8b00;
+  --brand-highlight: #ff7ee0;
+  --brand-primary-pastel: #c2cbff;
+  --brand-energy-pastel: #88ffbf;
+  --brand-signal-pastel: #f7f1a5;
+  --brand-warm-pastel: #ffd29d;
+  --brand-highlight-pastel: #ebd2ff;
+  --on-brand-primary: #ffffff;
+  --on-brand-energy: #050505;
+  --on-brand-signal: #050505;
+  --on-brand-warm: #050505;
+  --on-brand-highlight: #050505;
+  --on-pastel: #050505;
 
-  --gutter: clamp(16px, 4vw, 48px);
-  --max: 1136px;
+  /* portada (Pixel Trail) */
+  --cover-bg: #0ee973;
+  --cover-title: #f7f1a5;
+  --cover-ink: #050505;
+  --cover-px-a: #ebd2ff;
+  --cover-px-b: #f7f1a5;
+  --cover-px-c: #88ffbf;
+  --cover-on-px: #050505;
+  --cover-grid: rgba(115, 55, 241, 0.18);
+
+  /* --- tipografía -------------------------------------------------------- */
+  --font-primary: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-data: 'Roboto', system-ui, sans-serif;
+  --type-display-web: 300 clamp(40px, 5.4vw, 64px) / 1.1 var(--font-primary);
+  --type-h1: 400 clamp(32px, 3.6vw, 48px) / 1.16 var(--font-primary);
+  --type-h2: 400 clamp(26px, 2.8vw, 36px) / 1.22 var(--font-primary);
+  --type-h3: 400 26px / 34px var(--font-primary);
+  --type-body-l: 400 20px / 30px var(--font-primary);
+  --type-body-m: 400 16px / 24px var(--font-primary);
+  --type-body-s: 400 14px / 20px var(--font-primary);
+  --type-label-m: 500 14px / 20px var(--font-primary);
+  --type-caption: 400 12px / 18px var(--font-primary);
+  --type-metric-m: 400 48px / 56px var(--font-data);
+  --type-data-m: 400 14px / 20px var(--font-data);
+  --tracking-display: -0.045em;
+
+  /* --- espacio, forma y controles ---------------------------------------- */
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-s: 12px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-section: 60px;
+  --space-hero: 96px;
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-s: 7px;
+  --radius-m: 10px;
+  --radius-l: 15px;
+  --radius-xl: 21px;
+  --radius-pill: 9999px;
+  --control-xxs: 20px;
+  --control-xs: 28px;
+  --control-s: 36px;
+  --control-m: 44px;
+  --control-l: 52px;
+  --icon-12: 12px;
+  --icon-18: 18px;
+  --icon-20: 20px;
+  --grid-module: 80px;
+
+  --gutter: clamp(16px, 4vw, 60px);
+  --max: 1320px;
   --header-h: 64px;
-  --radius: 4px;
+  --radius: var(--radius-s);
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
 
   color-scheme: dark;
+}
+
+/* --- 3 · semánticos --------------------------------------------------------
+   Se declaran también en app-root y .theme-scope porque dependen de la capa de
+   marca: así se recalculan donde ThemeService (o una tarjeta de evento) cambia
+   la paleta. */
+:root,
+app-root,
+.theme-scope {
+  --color-bg: var(--dt-ink);
+  --color-surface: var(--dt-gray-900);
+  --color-surface-raised: var(--dt-gray-800);
+  --color-text: var(--dt-gray-50);
+  --color-text-muted: var(--dt-gray-300);
+  --color-text-subtle: var(--dt-gray-400);
+  --color-border: var(--dt-gray-700);
+  --color-border-strong: var(--dt-gray-600);
+  --color-accent: var(--brand-energy);
+  --color-on-accent: var(--on-brand-energy);
+  --color-accent-soft: color-mix(in srgb, var(--brand-energy) 10%, transparent);
+  --color-light-bg: var(--dt-gray-50);
+  --color-light-surface: var(--dt-white);
+  --color-light-text: var(--dt-ink);
+  --color-light-muted: var(--dt-gray-500);
+  --color-light-border: var(--dt-gray-150);
+  --color-light-accent: var(--brand-primary);
+
+  /* alias heredados: las páginas internas aún los usan */
+  --ink: var(--color-bg);
+  --ink-2: var(--color-surface);
+  --ink-3: var(--color-surface-raised);
+  --ink-4: var(--dt-gray-700);
+  --line: var(--color-border);
+  --line-2: var(--color-border-strong);
+  --bone: var(--color-text);
+  --bone-2: var(--color-light-bg);
+  --paper: var(--dt-gray-100);
+  --sand: var(--dt-gray-150);
+  --muted: var(--color-text-muted);
+  --muted-2: var(--dt-gray-200);
+  --muted-3: var(--color-text-subtle);
+  --signal: var(--color-accent);
+  --brick: var(--color-light-accent);
+  --indigo: var(--brand-primary);
+  --display: var(--font-primary);
+  --sans: var(--font-primary);
+  --mono: var(--font-data);
 }
 
 *,
@@ -64,13 +175,14 @@ html.lenis body {
 
 body {
   margin: 0;
-  background: var(--ink);
-  color: var(--bone);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.55;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: var(--type-body-m);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+app-root {
+  display: block;
 }
 
 img,
@@ -95,13 +207,13 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid var(--signal);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: var(--signal);
-  color: var(--ink);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
 }
 
 /* --- utilidades ----------------------------------------------------------- */
@@ -113,65 +225,64 @@ p {
 }
 
 .eyebrow {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--signal);
+  font: var(--type-label-m);
+  color: var(--color-accent);
 }
 
+/* Titulares: Light en caja baja para contenido; ExtraBold en mayúsculas solo en portadas */
 .display {
-  font-family: var(--display);
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 0.88;
-  letter-spacing: -0.01em;
+  font-family: var(--font-primary);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-display);
 }
 .display-xl {
-  font-size: clamp(64px, 13vw, 184px);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(56px, 13vw, 208px);
+  line-height: 0.84;
+  letter-spacing: -0.03em;
 }
 .display-l {
-  font-size: clamp(48px, 7.5vw, 104px);
+  font-size: clamp(40px, 5.4vw, 64px);
 }
 .display-m {
-  font-size: clamp(36px, 5vw, 64px);
+  font-size: clamp(30px, 3.6vw, 48px);
 }
 .display-s {
-  font-size: clamp(26px, 3vw, 34px);
-  line-height: 0.95;
+  font-size: clamp(22px, 2.2vw, 26px);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .lead {
   font-size: clamp(17px, 1.6vw, 20px);
-  color: var(--muted-2);
+  line-height: 1.5;
+  color: var(--color-text-muted);
   max-width: 56ch;
 }
 
 .mono {
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-family: var(--font-data);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 4px 8px;
-  border-radius: 2px;
-  background: var(--signal);
-  color: var(--ink);
+  font: 500 12px/18px var(--font-primary);
+  padding: 2px 8px;
+  border-radius: var(--radius-none);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
   white-space: nowrap;
 }
 .tag-dark {
-  background: var(--ink);
-  color: var(--bone);
+  background: var(--dt-ink);
+  color: var(--dt-gray-50);
 }
 .tag-line {
   background: transparent;
@@ -188,15 +299,15 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  min-height: 50px;
-  padding: 0 24px;
-  border-radius: var(--radius);
-  border: 2px solid var(--signal);
-  background: var(--signal);
-  color: var(--ink);
-  font-weight: 800;
-  font-size: 16px;
+  gap: var(--space-xs);
+  min-height: var(--control-m);
+  padding: 0 var(--space-l);
+  border-radius: var(--radius-s);
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: var(--type-label-m);
+  font-size: 15px;
   text-decoration: none;
   cursor: pointer;
   transition:
@@ -228,12 +339,12 @@ p {
   }
 }
 .btn-dark {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--bone);
+  background: var(--dt-ink);
+  border-color: var(--dt-ink);
+  color: var(--dt-gray-50);
 }
 .btn-sm {
-  min-height: 40px;
+  min-height: var(--control-s);
   padding: 0 16px;
   font-size: 14px;
 }
@@ -242,8 +353,8 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-weight: 800;
-  color: var(--signal);
+  font-weight: 500;
+  color: var(--color-accent);
   text-decoration: none;
   border-bottom: 2px solid transparent;
   &:hover {
@@ -253,32 +364,30 @@ p {
 
 /* Panel translúcido sobre la escena 3D */
 .glass {
-  background: rgba(18, 18, 18, 0.72);
+  background: color-mix(in srgb, var(--dt-ink) 78%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  border: 1px solid rgba(242, 239, 233, 0.1);
-  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--dt-gray-50) 12%, transparent);
+  border-radius: var(--radius-m);
 }
 
 .section {
-  padding-block: clamp(64px, 10vw, 128px);
+  padding-block: clamp(64px, 9vw, 120px);
 }
-.section-light {
-  background: var(--bone-2);
-  color: var(--ink);
+/* Secciones claras: el acento pasa al primario, que sí contrasta sobre claro */
+.section-light,
+.section-paper {
+  --color-accent: var(--color-light-accent);
+  --color-on-accent: var(--on-brand-primary);
+  --signal: var(--color-accent);
+  background: var(--color-light-bg);
+  color: var(--color-light-text);
   .lead {
-    color: #4a463f;
-  }
-  .eyebrow {
-    color: var(--brick);
+    color: var(--color-light-muted);
   }
 }
 .section-paper {
-  background: var(--paper);
-  color: var(--ink);
-  .eyebrow {
-    color: var(--brick);
-  }
+  background: var(--dt-gray-100);
 }
 
 .grid {
@@ -305,10 +414,8 @@ p {
 }
 
 .note {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--muted-3);
+  font: var(--type-caption);
+  color: var(--color-text-subtle);
 }
 
 /* aparición al hacer scroll (la activa GSAP en el cliente) */

@@ -32,7 +32,7 @@ const TYPES: { id: PostType | 'todo'; label: string }[] = [
             <span class="mono">Sede</span>
             <select [value]="race()" (change)="race.set($any($event.target).value)">
               <option value="todo">Todas</option>
-              <option value="copa">Copa general</option>
+              <option value="copa">Evento general</option>
               @for (r of data.races(); track r.id) {
                 <option [value]="r.id">Parada {{ r.num }} · {{ r.short }}</option>
               }
@@ -70,7 +70,7 @@ const TYPES: { id: PostType | 'todo'; label: string }[] = [
     }
     .filters button {
       padding: 9px 14px;
-      border: 1px solid #cfc9bd;
+      border: 1px solid var(--color-light-border);
       background: transparent;
       border-radius: 3px;
       font-weight: 700;
@@ -94,7 +94,7 @@ const TYPES: { id: PostType | 'todo'; label: string }[] = [
     select {
       height: 40px;
       padding: 0 10px;
-      border: 1px solid #cfc9bd;
+      border: 1px solid var(--color-light-border);
       border-radius: 3px;
       background: #fff;
       color: var(--ink);
@@ -103,7 +103,7 @@ const TYPES: { id: PostType | 'todo'; label: string }[] = [
     .featured {
       margin-bottom: 40px;
       padding-bottom: 40px;
-      border-bottom: 1px solid #ddd6c8;
+      border-bottom: 1px solid var(--color-light-border);
     }
   `,
 })

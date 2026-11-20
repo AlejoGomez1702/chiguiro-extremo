@@ -9,7 +9,7 @@ import { ProductArt } from '../../shared/product-art';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, PageHead, ProductArt],
   template: `
-    <app-page-head eyebrow="Tienda oficial" title="Colecciones 2027" lead="Ropa y coleccionables de la Copa y de cada parada. Retiro en la fan zone o envío nacional." />
+    <app-page-head eyebrow="Tienda oficial" title="Colecciones 2027" lead="Ropa y coleccionables de Downtown y de cada parada. Retiro en la fan zone o envío nacional." />
     <section class="section section-paper">
       <div class="container">
         <div class="filters" role="tablist" aria-label="Colección">
@@ -52,7 +52,7 @@ import { ProductArt } from '../../shared/product-art';
     }
     .filters button {
       padding: 9px 14px;
-      border: 1px solid #c9c2b4;
+      border: 1px solid var(--color-light-border);
       background: transparent;
       border-radius: 3px;
       font-weight: 700;
@@ -114,7 +114,7 @@ import { ProductArt } from '../../shared/product-art';
     }
     .note {
       margin-top: 32px;
-      color: #6b665d;
+      color: var(--color-light-muted);
     }
   `,
 })
@@ -123,11 +123,11 @@ export default class Shop {
   protected col = signal('todo');
   protected cols = computed(() => [
     { id: 'todo', label: 'Todo' },
-    { id: 'copa', label: 'Copa 2027' },
+    { id: 'copa', label: 'Downtown 2027' },
     ...this.data.races().map((r) => ({ id: r.id, label: `Edición ${r.short}` })),
   ].filter((c) => c.id === 'todo' || this.data.products().some((p) => p.col === c.id)));
   protected list = computed(() => this.data.products().filter((p) => this.col() === 'todo' || p.col === this.col()));
   protected colName(id: string) {
-    return id === 'copa' ? 'Copa 2027' : `Edición ${this.data.race(id)?.short ?? ''}`;
+    return id === 'copa' ? 'Downtown 2027' : `Edición ${this.data.race(id)?.short ?? ''}`;
   }
 }

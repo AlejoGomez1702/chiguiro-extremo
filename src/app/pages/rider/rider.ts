@@ -180,7 +180,7 @@ export default class RiderPage {
   constructor() {
     effect(() => {
       const r = this.rider();
-      if (r) this.seo.set(r.name, `${r.name} (${r.country}), piloto invitado de la Copa LATAM DH. ${r.desc}`);
+      if (r) this.seo.set(r.name, `${r.name} (${r.country}), rider invitado de Downtown. ${r.desc}`);
     });
   }
 }

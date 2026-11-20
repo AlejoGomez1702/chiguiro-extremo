@@ -60,7 +60,7 @@ const TYPE: Record<string, string> = { noticia: 'Noticia', cronica: 'Crónica', 
       right: 10px;
       bottom: 10px;
       font-size: 10px;
-      background: rgba(18, 18, 18, 0.85);
+      background: color-mix(in srgb, var(--dt-ink) 85%, transparent);
       color: var(--bone);
       padding: 2px 6px;
     }

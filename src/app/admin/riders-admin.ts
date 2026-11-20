@@ -12,7 +12,6 @@ import { confirmDelete, newId } from './admin-util';
   template: `
     <header class="adm-head">
       <div>
-        <span class="eyebrow">02 · Corredores</span>
         <h1 class="display display-m">Corredores por categoría</h1>
         <p>Perfiles de pilotos, placas y paradas en las que participan.</p>
       </div>

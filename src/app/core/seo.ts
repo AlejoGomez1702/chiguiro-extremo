@@ -7,7 +7,7 @@ export class Seo {
   private meta = inject(Meta);
 
   set(title: string, description: string) {
-    const full = `${title} · Copa LATAM DH`;
+    const full = `${title} · Chigüiro Extremo`;
     this.title.setTitle(full);
     this.meta.updateTag({ name: 'description', content: description });
     this.meta.updateTag({ property: 'og:title', content: full });

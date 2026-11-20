@@ -24,7 +24,6 @@ const KINDS = ['tee', 'longsleeve', 'hoodie', 'cap', 'gloves', 'socks', 'poster'
   template: `
     <header class="adm-head">
       <div>
-        <span class="eyebrow">04 · Productos</span>
         <h1 class="display display-m">Tienda oficial</h1>
         <p>Catálogo de la tienda por colección de cada parada.</p>
       </div>
@@ -45,7 +44,7 @@ const KINDS = ['tee', 'longsleeve', 'hoodie', 'cap', 'gloves', 'socks', 'poster'
                 <label class="adm-fld">
                   <span>Colección</span>
                   <select formControlName="col">
-                    <option value="copa">Copa general</option>
+                    <option value="copa">Evento general</option>
                     @for (r of data.races(); track r.id) {
                       <option [value]="r.id">Parada {{ r.num }} · {{ r.short }}</option>
                     }

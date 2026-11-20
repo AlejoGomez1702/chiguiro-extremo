@@ -11,26 +11,28 @@ import { Logo } from './logo';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterLinkActive, Logo],
   template: `
-    <header [class.solid]="solid()" [class.open]="menu()">
-      <div class="container bar">
-        <a routerLink="/" class="brand" aria-label="Copa LATAM Downhill Urbano, inicio" (click)="menu.set(false)">
+    <header [class.solid]="solid()" [class.on-cover]="onCover()" [class.open]="menu()">
+      <div class="bar">
+        <a routerLink="/" class="brand" aria-label="Chigüiro Extremo, inicio" (click)="menu.set(false)">
           <app-logo />
         </a>
         <nav id="main-nav" aria-label="Principal">
           @for (l of links; track l.path) {
             <a [routerLink]="l.path" routerLinkActive="active" (click)="menu.set(false)">{{ l.label }}</a>
           }
-          <a routerLink="/tienda" class="btn btn-sm shop" (click)="menu.set(false)">Tienda</a>
         </nav>
-        <button class="icon cart" type="button" (click)="cart.open.set(true)" [attr.aria-label]="'Carrito, ' + cart.count() + ' productos'">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7Z" /><path d="M9 7a3 3 0 0 1 6 0" /></svg>
-          @if (cart.count()) {
-            <span class="badge">{{ cart.count() }}</span>
-          }
-        </button>
-        <button class="icon burger" type="button" (click)="menu.update((v) => !v)" [attr.aria-expanded]="menu()" aria-controls="main-nav" aria-label="Menú">
-          <span></span><span></span>
-        </button>
+        <div class="tools">
+          <a routerLink="/tienda" class="shop" routerLinkActive="active" (click)="menu.set(false)">Tienda</a>
+          <button class="icon cart" type="button" (click)="cart.open.set(true)" [attr.aria-label]="'Carrito, ' + cart.count() + ' productos'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 7h12l-1 13H7L6 7Z" /><path d="M9 7a3 3 0 0 1 6 0" /></svg>
+            @if (cart.count()) {
+              <span class="badge">{{ cart.count() }}</span>
+            }
+          </button>
+          <button class="icon burger" type="button" (click)="menu.update((v) => !v)" [attr.aria-expanded]="menu()" aria-controls="main-nav" aria-label="Menú">
+            <span></span><span></span>
+          </button>
+        </div>
       </div>
     </header>
   `,
@@ -40,50 +42,68 @@ import { Logo } from './logo';
       inset: 0 0 auto;
       z-index: 50;
       height: var(--header-h);
+      color: var(--color-text);
+      border-bottom: 1px solid transparent;
       transition:
         background 0.3s,
-        border-color 0.3s;
-      border-bottom: 1px solid transparent;
-      background: linear-gradient(rgba(18, 18, 18, 0.55), rgba(18, 18, 18, 0));
+        border-color 0.3s,
+        color 0.3s;
+    }
+    /* sobre la portada de color: tinta del evento, sin fondo */
+    header.on-cover {
+      color: var(--cover-ink);
     }
     header.solid {
-      background: rgba(18, 18, 18, 0.92);
+      color: var(--color-text);
+      background: color-mix(in srgb, var(--color-bg) 92%, transparent);
       backdrop-filter: blur(10px);
-      border-color: var(--line);
+      border-color: var(--color-border);
     }
     .bar {
       height: 100%;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 24px;
+      gap: var(--space-l);
+      padding-inline: clamp(16px, 1.4vw, 24px);
     }
     .brand {
+      justify-self: start;
       text-decoration: none;
-      margin-right: auto;
     }
     nav {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: var(--space-xxs);
     }
-    nav a:not(.btn) {
-      padding: 8px 12px;
-      font-weight: 700;
-      font-size: 15px;
-      text-decoration: none;
-      color: var(--muted-2);
-      border-radius: 3px;
-      transition: color 0.2s;
-    }
-    nav a:not(.btn):hover,
-    nav a.active {
-      color: var(--bone);
-    }
-    nav a.active {
-      box-shadow: inset 0 -2px 0 var(--signal);
-    }
+    nav a,
     .shop {
-      margin-left: 8px;
+      padding: 6px 12px;
+      font: var(--type-label-m);
+      text-decoration: none;
+      transition:
+        background 0.2s,
+        color 0.2s;
+    }
+    /* enlace activo o bajo el cursor: bloque sólido con el texto en negativo */
+    nav a:hover,
+    .shop:hover,
+    nav a.active,
+    .shop.active {
+      background: var(--color-text);
+      color: var(--color-bg);
+    }
+    .on-cover:not(.solid) nav a:hover,
+    .on-cover:not(.solid) .shop:hover,
+    .on-cover:not(.solid) nav a.active {
+      background: var(--cover-ink);
+      color: var(--cover-bg);
+    }
+    .tools {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xxs);
     }
     .icon {
       position: relative;
@@ -96,8 +116,8 @@ import { Logo } from './logo';
       cursor: pointer;
     }
     .icon svg {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
     }
     .badge {
       position: absolute;
@@ -105,10 +125,9 @@ import { Logo } from './logo';
       right: 2px;
       min-width: 18px;
       height: 18px;
-      border-radius: 9px;
-      background: var(--signal);
-      color: var(--ink);
-      font: 700 11px/18px var(--mono);
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+      font: 500 11px/18px var(--font-data);
       text-align: center;
     }
     .burger {
@@ -119,7 +138,7 @@ import { Logo } from './logo';
       left: 11px;
       right: 11px;
       height: 2px;
-      background: var(--bone);
+      background: currentColor;
       transition: transform 0.3s var(--ease);
     }
     .burger span:first-child {
@@ -135,8 +154,14 @@ import { Logo } from './logo';
       transform: rotate(-45deg);
     }
     @media (max-width: 860px) {
+      .bar {
+        grid-template-columns: 1fr auto;
+      }
       .burger {
         display: grid;
+      }
+      .shop {
+        display: none;
       }
       nav {
         position: fixed;
@@ -144,9 +169,10 @@ import { Logo } from './logo';
         flex-direction: column;
         align-items: stretch;
         gap: 0;
-        padding: 12px var(--gutter) 24px;
-        background: rgba(18, 18, 18, 0.97);
-        border-bottom: 1px solid var(--line);
+        padding: var(--space-s) var(--gutter) var(--space-l);
+        background: var(--color-bg);
+        color: var(--color-text);
+        border-bottom: 1px solid var(--color-border);
         transform: translateY(-8px);
         opacity: 0;
         visibility: hidden;
@@ -157,17 +183,17 @@ import { Logo } from './logo';
         opacity: 1;
         visibility: visible;
       }
-      nav a:not(.btn) {
+      nav a {
         padding: 14px 0;
-        font-size: 20px;
-        border-bottom: 1px solid var(--line);
+        font-size: 22px;
+        font-weight: 300;
+        line-height: 1.2;
+        border-bottom: 1px solid var(--color-border);
       }
+      nav a:hover,
       nav a.active {
-        box-shadow: none;
-        color: var(--signal);
-      }
-      .shop {
-        margin: 16px 0 0;
+        background: none;
+        color: var(--color-accent);
       }
     }
   `,
@@ -177,18 +203,23 @@ export class Header {
   private scroll = inject(SmoothScroll);
   private router = inject(Router);
   protected menu = signal(false);
-  private url = toSignal(
+  private path = toSignal(
     this.router.events.pipe(
       filter((e) => e instanceof NavigationEnd),
-      map((e) => (e as NavigationEnd).urlAfterRedirects),
+      map((e) => (e as NavigationEnd).urlAfterRedirects.split(/[?#]/)[0]),
     ),
-    { initialValue: this.router.url },
+    { initialValue: this.router.url.split(/[?#]/)[0] },
   );
-  protected solid = computed(() => this.menu() || this.scroll.y() > 40 || !this.url().split(/[?#]/)[0].match(/^\/?$|^\/carreras\/[^/]+$/));
+  /** rutas que abren con una portada de color a pantalla completa */
+  private cover = computed(() => /^\/?$|^\/eventos\/[^/]+$/.test(this.path()));
+  private clear = computed(() => this.cover() || /^\/carreras\/[^/]+$/.test(this.path()));
+  protected onCover = computed(() => this.cover() && !this.menu());
+  protected solid = computed(() => this.menu() || this.scroll.y() > 40 || !this.clear());
   protected links = [
-    { path: '/carreras', label: 'Carreras' },
+    { path: '/eventos', label: 'Eventos' },
+    { path: '/carreras', label: 'Paradas' },
+    { path: '/corredores', label: 'Riders' },
     { path: '/cobertura', label: 'Cobertura' },
-    { path: '/corredores', label: 'Corredores' },
-    { path: '/copa', label: 'La Copa' },
+    { path: '/serie', label: 'La serie' },
   ];
 }

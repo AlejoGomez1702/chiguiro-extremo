@@ -19,11 +19,11 @@ const STATUS: { v: RaceStatus; label: string }[] = [
   template: `
     <header class="adm-head">
       <div>
-        <span class="eyebrow">01 · Eventos</span>
-        <h1 class="display display-m">Paradas de la Copa</h1>
-        <p>Fechas, sedes y estado de inscripción de cada parada.</p>
+        
+        <h1 class="display display-m">Paradas</h1>
+        <p>Las ciudades y fechas de cada evento, con su estado de inscripción.</p>
       </div>
-      <button type="button" class="btn btn-sm" (click)="startNew()">+ Nuevo evento</button>
+      <button type="button" class="btn btn-sm" (click)="startNew()">Crear parada</button>
     </header>
 
     <div class="adm-split">
@@ -31,7 +31,7 @@ const STATUS: { v: RaceStatus; label: string }[] = [
         <section class="adm-card" aria-labelledby="race-form-h">
           <form class="adm-form" [formGroup]="form" (ngSubmit)="save()">
             <div class="adm-form-head">
-              <h2 id="race-form-h">{{ editing() === 'new' ? 'Nuevo evento' : 'Editar evento' }}</h2>
+              <h2 id="race-form-h">{{ editing() === 'new' ? 'Crear parada' : 'Editar parada' }}</h2>
               <button type="button" class="adm-btn" (click)="cancel()">Cerrar</button>
             </div>
             <div class="adm-grid">
@@ -39,6 +39,14 @@ const STATUS: { v: RaceStatus; label: string }[] = [
                 <span>ID (slug)</span>
                 <input formControlName="id" [readOnly]="editing() !== 'new'" />
                 <small>Se usa en la URL: /carreras/&lt;id&gt;</small>
+              </label>
+              <label class="adm-fld">
+                <span>Evento</span>
+                <select formControlName="eventId">
+                  @for (e of data.events(); track e.id) {
+                    <option [value]="e.id">{{ e.name }} {{ e.year }}</option>
+                  }
+                </select>
               </label>
               <label class="adm-fld"><span>Número</span><input formControlName="num" placeholder="01" /></label>
               <label class="adm-fld"><span>Código país</span><input formControlName="code" maxlength="3" placeholder="CO" /></label>
@@ -73,7 +81,7 @@ const STATUS: { v: RaceStatus; label: string }[] = [
             </div>
             <div class="adm-checks">
               <label class="adm-chk"><input type="checkbox" formControlName="hasMap" /> Tiene mapa del trazado</label>
-              <label class="adm-chk"><input type="checkbox" formControlName="isNext" /> Es la próxima parada (portada)</label>
+              <label class="adm-chk"><input type="checkbox" formControlName="isNext" /> Es la próxima parada de su evento</label>
             </div>
             @if (error()) {
               <p class="adm-err" role="alert">{{ error() }}</p>
@@ -91,6 +99,7 @@ const STATUS: { v: RaceStatus; label: string }[] = [
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Parada</th>
               <th scope="col">Evento</th>
               <th scope="col">Fecha</th>
               <th scope="col">Estado</th>
@@ -109,6 +118,7 @@ const STATUS: { v: RaceStatus; label: string }[] = [
                   }
                   <div class="muted">{{ r.place }} · {{ r.code }}</div>
                 </td>
+                <td>{{ data.event(r.eventId)?.name ?? "Sin evento" }}</td>
                 <td class="mono">{{ r.dshort }}</td>
                 <td><span class="tag tag-ink-line">{{ r.statusLabel }}</span></td>
                 <td class="muted">{{ r.insc }}</td>
@@ -120,7 +130,7 @@ const STATUS: { v: RaceStatus; label: string }[] = [
                 </td>
               </tr>
             } @empty {
-              <tr><td colspan="6" class="adm-empty">No hay eventos.</td></tr>
+              <tr><td colspan="7" class="adm-empty">Este evento aún no tiene paradas. Crea la primera.</td></tr>
             }
           </tbody>
         </table>
@@ -139,6 +149,7 @@ export default class RacesAdmin implements OnInit {
 
   protected form = this.fb.group({
     id: ['', [Validators.required, Validators.pattern(/^[a-z0-9-]+$/)]],
+    eventId: [''],
     num: ['', Validators.required],
     code: ['', Validators.required],
     title: ['', Validators.required],
@@ -160,9 +171,9 @@ export default class RacesAdmin implements OnInit {
   }
 
   protected startNew() {
-    const n = String(this.data.races().length + 1).padStart(2, '0');
+    const n = String(this.data.mainRaces().length + 1).padStart(2, '0');
     this.form.reset();
-    this.form.patchValue({ id: newId('evt'), num: n });
+    this.form.patchValue({ id: newId('parada'), num: n, eventId: this.data.featuredEventId() });
     this.error.set('');
     this.editing.set('new');
   }
@@ -192,7 +203,7 @@ export default class RacesAdmin implements OnInit {
     const v = this.form.getRawValue();
     const isNew = this.editing() === 'new';
     if (isNew && this.data.race(v.id)) {
-      this.error.set('Ya existe un evento con ese ID.');
+      this.error.set('Ya existe una parada con ese ID. Elige otro.');
       return;
     }
     const base: Race = this.data.race(v.id) ?? {
@@ -207,7 +218,7 @@ export default class RacesAdmin implements OnInit {
     };
     const race: Race = { ...base, ...v, code: v.code.toUpperCase(), img: v.img || null };
     if (race.isNext) {
-      for (const other of this.data.races()) {
+      for (const other of this.data.racesOf(race.eventId)) {
         if (other.id !== race.id && other.isNext) this.data.upsert('races', { ...other, isNext: false });
       }
     }

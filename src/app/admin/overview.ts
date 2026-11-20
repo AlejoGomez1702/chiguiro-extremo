@@ -9,9 +9,8 @@ import { DataService } from '../core/data/data.service';
   template: `
     <header class="adm-head">
       <div>
-        <span class="eyebrow">Resumen</span>
-        <h1 class="display display-m">Panel de la Copa</h1>
-        <p>Gestiona eventos, corredores, cobertura y tienda desde un solo lugar.</p>
+        <h1 class="display display-m">Panel de Chigüiro Extremo</h1>
+        <p>Evento principal: <strong>{{ data.featured().name }} {{ data.featured().year }}</strong>. Desde aquí gestionas eventos, paradas, riders, cobertura y tienda.</p>
       </div>
     </header>
 
@@ -44,8 +43,8 @@ import { DataService } from '../core/data/data.service';
             <span class="tag tag-ink-line">{{ r.insc }}</span>
           </div>
           <div class="adm-form-foot">
-            <a class="adm-btn" routerLink="/admin/eventos">Editar eventos</a>
-            <a class="adm-btn" routerLink="/admin/inicio">Cambiar próxima</a>
+            <a class="adm-btn" routerLink="/admin/paradas">Editar paradas</a>
+            <a class="adm-btn" routerLink="/admin/inicio">Cambiar evento principal</a>
           </div>
         } @else {
           <p class="adm-empty">No hay eventos cargados.</p>
@@ -55,11 +54,12 @@ import { DataService } from '../core/data/data.service';
       <section class="adm-card" aria-labelledby="quick-h">
         <h2 id="quick-h">Accesos rápidos</h2>
         <ul class="quick">
-          <li><a routerLink="/admin/eventos" [queryParams]="{ nuevo: 1 }">+ Nuevo evento</a></li>
-          <li><a routerLink="/admin/corredores" [queryParams]="{ nuevo: 1 }">+ Nuevo corredor</a></li>
-          <li><a routerLink="/admin/noticias" [queryParams]="{ nuevo: 1 }">+ Nueva publicación</a></li>
-          <li><a routerLink="/admin/productos" [queryParams]="{ nuevo: 1 }">+ Nuevo producto</a></li>
-          <li><a routerLink="/admin/inicio">Editar inicio y galería</a></li>
+          <li><a routerLink="/admin/eventos" [queryParams]="{ nuevo: 1 }">Crear evento</a></li>
+          <li><a [routerLink]="['/admin/eventos', data.featuredEventId()]">Personalizar la portada</a></li>
+          <li><a routerLink="/admin/paradas" [queryParams]="{ nuevo: 1 }">Crear parada</a></li>
+          <li><a routerLink="/admin/corredores" [queryParams]="{ nuevo: 1 }">Crear rider</a></li>
+          <li><a routerLink="/admin/noticias" [queryParams]="{ nuevo: 1 }">Crear publicación</a></li>
+          <li><a routerLink="/admin/productos" [queryParams]="{ nuevo: 1 }">Crear producto</a></li>
         </ul>
         <h2 class="sub">Últimas publicaciones</h2>
         <ul class="latest">
@@ -97,12 +97,13 @@ import { DataService } from '../core/data/data.service';
       text-decoration: none;
     }
     .num {
+      font: var(--type-metric-m);
       font-size: 56px;
+      line-height: 1;
       color: var(--signal);
     }
     .lbl {
-      text-transform: uppercase;
-      font-weight: 700;
+      font: var(--type-label-m);
     }
     .cols {
       display: grid;
@@ -161,8 +162,9 @@ export default class Overview {
   protected data = inject(DataService);
 
   protected stats = computed(() => [
-    { label: 'Eventos', count: this.data.races().length, path: '/admin/eventos', sub: `${this.data.races().filter((r) => r.status === 'finalizada').length} finalizados` },
-    { label: 'Corredores', count: this.data.riders().length, path: '/admin/corredores', sub: `${this.data.categories().length} categorías` },
+    { label: 'Eventos', count: this.data.events().length, path: '/admin/eventos', sub: `${this.data.events().filter((e) => e.status === 'archivado').length} en el histórico` },
+    { label: 'Paradas', count: this.data.races().length, path: '/admin/paradas', sub: `${this.data.mainRaces().length} del evento principal` },
+    { label: 'Riders', count: this.data.riders().length, path: '/admin/corredores', sub: `${this.data.categories().length} categorías` },
     { label: 'Noticias', count: this.data.posts().length, path: '/admin/noticias', sub: `${this.data.posts().filter((p) => p.featured).length} destacadas` },
     { label: 'Productos', count: this.data.products().length, path: '/admin/productos', sub: '' },
   ]);

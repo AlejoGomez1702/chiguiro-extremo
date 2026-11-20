@@ -1,7 +1,46 @@
 /**
- * Modelo de dominio de la Copa LATAM DH (ver diagrama de dominio).
+ * Modelo de dominio de Chigüiro Extremo: el sitio aloja varios eventos
+ * (SiteEvent); cada uno tiene sus paradas (Race), su tema visual y su portada.
  * Los nombres de campos siguen el demo para facilitar la migración a Supabase.
  */
+import type { EventTheme } from '../theme/brand';
+
+export type EventStatus = 'borrador' | 'publicado' | 'archivado';
+export type EventKind = 'serie' | 'unico';
+export type ModuleKey = 'paradas' | 'trazado' | 'corredores' | 'cobertura' | 'tienda' | 'aliados';
+
+export interface EventModule {
+  key: ModuleKey;
+  on: boolean;
+}
+
+export interface EventCover {
+  line1: string;
+  line2: string;
+  /** flecha circular al final de la segunda línea */
+  arrow: boolean;
+  kickerLeft: string;
+  kickerRight: string;
+}
+
+export interface SiteEvent {
+  /** slug: se usa en la URL /eventos/<id> */
+  id: string;
+  name: string;
+  /** apellido del evento, p. ej. "Serie Latinoamérica" */
+  series: string;
+  kind: EventKind;
+  status: EventStatus;
+  year: number;
+  dateLabel: string;
+  place: string;
+  summary: string;
+  theme: EventTheme;
+  cover: EventCover;
+  /** secciones de la página del evento, en orden */
+  modules: EventModule[];
+}
+
 export type RaceStatus = 'proxima' | 'fecha' | 'tba' | 'finalizada';
 
 export interface Fact {
@@ -11,6 +50,8 @@ export interface Fact {
 
 export interface Race {
   id: string;
+  /** evento al que pertenece la parada */
+  eventId: string;
   num: string;
   /** código ISO del país */
   code: string;
@@ -69,8 +110,10 @@ export type PostType = 'noticia' | 'cronica' | 'galeria' | 'video';
 export interface Post {
   id: string;
   type: PostType;
-  /** id de carrera o 'copa' */
+  /** id de parada, o 'copa' para el evento en general */
   race: string;
+  /** evento de una publicación general; si falta, es el evento principal */
+  eventId?: string;
   title: string;
   dek: string;
   date: string;

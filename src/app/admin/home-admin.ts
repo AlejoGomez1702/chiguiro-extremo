@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { DataService } from '../core/data/data.service';
 import { IMAGES } from './admin-util';
 
@@ -13,22 +14,44 @@ interface GalleryItem {
 @Component({
   selector: 'app-admin-home',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   template: `
     <header class="adm-head">
       <div>
-        <span class="eyebrow">05 · Inicio y galería</span>
-        <h1 class="display display-m">Portada del sitio</h1>
-        <p>Elige qué parada protagoniza la portada y ordena la galería de inicio.</p>
+        <h1 class="display display-m">Evento principal</h1>
+        <p>El evento principal ocupa el inicio del sitio y le da sus colores a todo lo demás. Solo se pueden elegir eventos publicados.</p>
       </div>
     </header>
 
-    <section class="adm-card block" aria-labelledby="hero-h">
-      <h2 id="hero-h">Próxima parada en portada</h2>
+    <section class="adm-card block" aria-labelledby="main-h">
+      <h2 id="main-h">Evento en el inicio</h2>
       <fieldset>
-        <legend class="adm-legend">Parada destacada</legend>
+        <legend class="adm-legend">Eventos publicados</legend>
         <div class="races">
-          @for (r of data.races(); track r.id) {
+          @for (e of published(); track e.id) {
+            <label class="race" [class.on]="e.id === data.featuredEventId()">
+              <input type="radio" name="main-event" [checked]="e.id === data.featuredEventId()" (change)="setMain(e.id)" />
+              <span class="mono">{{ e.year }} · {{ data.racesOf(e.id).length }} paradas</span>
+              <strong class="display">{{ e.name }}</strong>
+              <span class="note">{{ e.series }}</span>
+            </label>
+          } @empty {
+            <p class="adm-empty">No hay eventos publicados. <a routerLink="/admin/eventos">Publica uno</a> para elegirlo.</p>
+          }
+        </div>
+      </fieldset>
+      <div class="adm-form-foot foot">
+        <a class="adm-btn" [routerLink]="['/admin/eventos', data.featuredEventId()]">Personalizar su portada</a>
+        <a class="adm-btn" routerLink="/admin/eventos">Todos los eventos</a>
+      </div>
+    </section>
+
+    <section class="adm-card block" aria-labelledby="hero-h">
+      <h2 id="hero-h">Próxima parada de {{ data.featured().name }}</h2>
+      <fieldset>
+        <legend class="adm-legend">Aparece destacada en la portada</legend>
+        <div class="races">
+          @for (r of data.mainRaces(); track r.id) {
             <label class="race" [class.on]="r.isNext">
               <input type="radio" name="next-race" [checked]="r.isNext" (change)="setNext(r.id)" />
               <span class="mono">Parada {{ r.num }} · {{ r.code }}</span>
@@ -39,7 +62,7 @@ interface GalleryItem {
         </div>
       </fieldset>
       @if (saved()) {
-        <p class="note ok" role="status">Portada actualizada: {{ data.nextRace().title }}.</p>
+        <p class="note ok" role="status">Inicio actualizado: {{ data.featured().name }}, próxima parada {{ data.nextRace().title }}.</p>
       }
     </section>
 
@@ -93,7 +116,7 @@ interface GalleryItem {
     }
     .race.on {
       border-color: var(--signal);
-      background: rgba(255, 91, 31, 0.08);
+      background: var(--color-accent-soft);
     }
     .race input {
       position: absolute;
@@ -101,8 +124,12 @@ interface GalleryItem {
       right: 14px;
     }
     .race strong {
-      font-size: 28px;
-      line-height: 1;
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    .foot {
+      margin-top: 16px;
     }
     .ok {
       margin-top: 12px;
@@ -156,8 +183,15 @@ export default class HomeAdmin {
   );
   protected visibleCount = computed(() => this.gallery().filter((g) => g.visible).length);
 
+  protected published = computed(() => this.data.events().filter((e) => e.status === 'publicado'));
+
+  protected setMain(id: string) {
+    this.data.featuredEventId.set(id);
+    this.saved.set(true);
+  }
+
   protected setNext(id: string) {
-    for (const r of this.data.races()) {
+    for (const r of this.data.mainRaces()) {
       const isNext = r.id === id;
       if (r.isNext !== isNext) this.data.upsert('races', { ...r, isNext });
     }

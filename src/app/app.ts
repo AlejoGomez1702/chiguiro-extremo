@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, afterNextRender, inject } from '@an
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { SmoothScroll } from './core/smooth-scroll.service';
+import { ThemeService } from './core/theme/theme.service';
 import { CartDrawer } from './layout/cart-drawer';
 import { Footer } from './layout/footer';
 import { Header } from './layout/header';
@@ -10,6 +11,7 @@ import { Header } from './layout/header';
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, Header, Footer, CartDrawer],
+  host: { '[style]': 'theme.vars()' },
   template: `
     <a class="skip" href="#contenido">Saltar al contenido</a>
     <app-header />
@@ -37,6 +39,7 @@ import { Header } from './layout/header';
   `,
 })
 export class App {
+  protected theme = inject(ThemeService);
   constructor() {
     const scroll = inject(SmoothScroll);
     const router = inject(Router);
