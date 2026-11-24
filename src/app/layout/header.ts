@@ -20,6 +20,7 @@ import { Logo } from './logo';
           @for (l of links; track l.path) {
             <a [routerLink]="l.path" routerLinkActive="active" (click)="menu.set(false)">{{ l.label }}</a>
           }
+          <a routerLink="/tienda" class="nav-shop" routerLinkActive="active" (click)="menu.set(false)">Tienda</a>
         </nav>
         <div class="tools">
           <a routerLink="/tienda" class="shop" routerLinkActive="active" (click)="menu.set(false)">Tienda</a>
@@ -130,7 +131,8 @@ import { Logo } from './logo';
       font: 500 11px/18px var(--font-data);
       text-align: center;
     }
-    .burger {
+    .burger,
+    nav .nav-shop {
       display: none;
     }
     .burger span {
@@ -162,6 +164,9 @@ import { Logo } from './logo';
       }
       .shop {
         display: none;
+      }
+      nav .nav-shop {
+        display: block;
       }
       nav {
         position: fixed;
